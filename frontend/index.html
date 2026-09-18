@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CheckLocal • Information You Can Trust | WhatsApp Civic Fact-Checking</title>
+  <meta name="description" content="A WhatsApp-first civic fact-checking tool and public web mirror for fuel prices, food staples, power outages, and community rumors in Nigeria, Kenya, and South Africa.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+
+  <!-- Top Hackathon Notice Bar -->
+  <aside class="top-notice-bar" aria-label="Hackathon announcement">
+    <span class="badge-pill">OSF × Andela Hackathon 2026</span>
+    <span>“Information you can trust” • Transparency & Social Cohesion Track • Nigeria, Kenya, South Africa</span>
+  </aside>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-wrapper">
+      <a href="/" class="brand-logo" aria-label="CheckLocal Homepage">
+        <div class="brand-icon">✓</div>
+        <span>CheckLocal<span class="brand-tag">.org</span></span>
+      </a>
+
+      <div class="nav-actions">
+        <a href="#simulator" class="btn btn-outline" id="navSimBtn">
+          <span>📱</span>
+          <span>WhatsApp Simulator</span>
+        </a>
+        <button class="btn btn-primary" id="openReportModalBtn">
+          <span>✍️</span>
+          <span>Submit Report</span>
+        </button>
+        <a href="https://wa.me/2348122432599?text=Hello%20CheckLocal,%20I%20want%20to%20verify%20a%20report" target="_blank" rel="noopener noreferrer" class="btn btn-wa" id="navWaBtn">
+          <span>💬</span>
+          <span>Forward to WhatsApp</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container hero-content">
+        <div class="hero-badge">
+          <span>🛡️</span>
+          <span>WhatsApp-First Civic Verification & Public Mirror</span>
+        </div>
+        <h1>Information you can trust.<br>Direct on WhatsApp, verified in seconds.</h1>
+        <p class="lead">
+          Ordinary citizens across Nigeria, Kenya, and South Africa get daily news and rumors through WhatsApp groups. CheckLocal lets you forward any fuel price, food rate, power blackout, or viral claim to get an instant, sourced fact-check in Plain English and Nigerian Pidgin.
+        </p>
+
+        <div class="hero-ctas">
+          <a href="https://wa.me/2348122432599?text=Hello%20CheckLocal,%20I%20want%20to%20verify%20a%20report" target="_blank" rel="noopener noreferrer" class="btn btn-wa" style="padding: 0.8rem 1.6rem; font-size: 1rem;">
+            <span style="font-size: 1.2rem;">💬</span>
+            <span>Forward to WhatsApp (+234 812 CHECK-99)</span>
+          </a>
+          <a href="#simulator" class="btn btn-sim" style="padding: 0.8rem 1.4rem; font-size: 1rem;">
+            <span>⚡ Test Bot Live in Browser</span>
+          </a>
+        </div>
+
+        <!-- Real-time Stats Ribbon -->
+        <div class="stats-ribbon">
+          <div class="stat-card">
+            <div class="stat-value" id="statVerifiedFacts">12</div>
+            <div class="stat-label">Verified Regional Facts</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statTotalReports">396</div>
+            <div class="stat-label">Citizen Submissions</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statTrustScore">96.4%</div>
+            <div class="stat-label">Community Consensus</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statAvgSpeed">3.8s</div>
+            <div class="stat-label">AI Verification Speed</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Content Layout (Feed + WhatsApp Simulator) -->
+    <div class="container main-layout">
+      <!-- Left Column: Public Trending Feed -->
+      <section class="feed-col" aria-label="Trending Local Facts Feed">
+        <div class="feed-header">
+          <div class="feed-header-top">
+            <div class="feed-title">
+              <h2>Trending Local Facts</h2>
+              <div class="feed-live-indicator">
+                <span class="pulsing-dot"></span>
+                <span>LIVE FEED</span>
+              </div>
+            </div>
+
+            <div class="search-box">
+              <span class="search-icon">🔍</span>
+              <input type="text" id="searchFeedInput" placeholder="Search city, fuel, garri, disco..." aria-label="Search trending local facts">
+            </div>
+          </div>
+
+          <!-- Filter Controls -->
+          <div class="filter-bar">
+            <div class="country-tabs" role="tablist" aria-label="Filter by country">
+              <button class="country-tab active" data-country="all" role="tab" aria-selected="true">🌐 All Focus Regions</button>
+              <button class="country-tab" data-country="Nigeria" role="tab" aria-selected="false">🇳🇬 Nigeria (Primary)</button>
+              <button class="country-tab" data-country="Kenya" role="tab" aria-selected="false">🇰🇪 Kenya</button>
+              <button class="country-tab" data-country="South Africa" role="tab" aria-selected="false">🇿🇦 South Africa</button>
+            </div>
+
+            <div class="category-pills" role="toolbar" aria-label="Filter by category">
+              <button class="cat-pill active" data-cat="all">All Updates</button>
+              <button class="cat-pill" data-cat="fuel_price">⛽ Fuel & Petrol</button>
+              <button class="cat-pill" data-cat="food_staple">🌾 Food Staples</button>
+              <button class="cat-pill" data-cat="power_status">⚡ Power & Disco</button>
+              <button class="cat-pill" data-cat="water_status">💧 Water Utility</button>
+              <button class="cat-pill" data-cat="rumor_claim">🔍 Debunked Rumors</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trending Cards Container -->
+        <div id="factsFeedContainer" class="fact-cards-grid">
+          <!-- Dynamically populated by app.js -->
+          <div style="padding: 2rem; text-align: center; color: #64748B;">Loading verified civic facts...</div>
+        </div>
+      </section>
+
+      <!-- Right Column: Interactive Smartphone WhatsApp Simulator -->
+      <aside class="simulator-col" id="simulator" aria-label="Interactive WhatsApp Bot Demo">
+        <div class="phone-mockup">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <!-- WhatsApp Chat Header -->
+            <div class="wa-chat-header">
+              <div class="wa-avatar">✓</div>
+              <div class="wa-header-info">
+                <div class="wa-contact-name">
+                  <span>CheckLocal Bot</span>
+                  <span class="wa-badge-verified">✓</span>
+                </div>
+                <div class="wa-status">
+                  <span>Online • Fact-Checking</span>
+                </div>
+              </div>
+              <div style="text-align:right; font-size:0.75rem; color:#A7F3D0;">
+                <div id="waUserBadge" style="font-weight:700;">Civic Scout 🌱</div>
+                <div id="waUserPoints" style="opacity:0.85;">25 pts</div>
+              </div>
+            </div>
+
+            <!-- Messages Stream -->
+            <div class="wa-messages-container" id="waMessagesContainer" role="log" aria-live="polite">
+              <div class="wa-bubble wa-bubble-incoming">
+                <div class="wa-msg-content">
+                  👋 <strong>Welcome to CheckLocal!</strong><br><br>
+                  Forward any message, voice note, or local claim to check the facts quickly.<br><br>
+                  <em>Tap a sample prompt below or type your own report:</em>
+                </div>
+                <div class="wa-msg-meta">
+                  <span>12:00 PM</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Typing Indicator -->
+            <div class="wa-typing-indicator" id="waTypingIndicator">
+              <div class="typing-dots">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+              </div>
+            </div>
+
+            <!-- Suggested Quick Chips -->
+            <div class="sim-quick-chips">
+              <button class="sim-chip" data-prompt="What is fuel price in Ikeja today?">⛽ Fuel in Ikeja?</button>
+              <button class="sim-chip" data-prompt="How much is paint bucket of garri in Mile 12?">🌾 Garri at Mile 12?</button>
+              <button class="sim-chip" data-prompt="Power outage in Lekki Phase 1, when will light return?">⚡ Power in Lekki?</button>
+              <button class="sim-chip" data-prompt="I heard a voice note that petrol is dropping to 450 naira tomorrow">🔍 Petrol dropping to ₦450?</button>
+              <button class="sim-chip" data-prompt="Current price of 2kg Unga in Nairobi supermarkets?">🇰🇪 Nairobi Unga?</button>
+              <button class="sim-chip" data-prompt="Is there load shedding in Johannesburg today?">🇿🇦 Eskom status?</button>
+            </div>
+
+            <!-- Chat Input Bar -->
+            <div class="wa-input-bar">
+              <input type="text" id="waMessageInput" placeholder="Type a rumor, price, or outage..." aria-label="Type message to WhatsApp Bot">
+              <button class="wa-send-btn" id="waSendBtn" onclick="WhatsAppSimulator.sendCurrentMessage()" aria-label="Send message">➤</button>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Ambassador Programme "Coming Soon" Section -->
+    <div class="container">
+      <section class="ambassador-section" aria-label="Local Ambassador Programme">
+        <div class="ambassador-grid">
+          <div>
+            <span class="ambassador-badge">COMING SOON • HACKATHON ROADMAP</span>
+            <h2>Local Ambassador Programme & Civic Tech Tools</h2>
+            <p>
+              Technology is strongest when grounded in grassroots community trust. In Phase 2, CheckLocal is rolling out an ambassador network of trusted market chairpersons, neighborhood leaders, and youth sentinels across Lagos, Nairobi, and Johannesburg.
+            </p>
+            <div class="ambassador-features">
+              <div class="amb-feat-card">
+                <div class="amb-feat-title">🏛️ Grassroots Sentinels</div>
+                <div class="amb-feat-desc">Physical verification of pump meters and market stall price spikes.</div>
+              </div>
+              <div class="amb-feat-card">
+                <div class="amb-feat-title">🎟️ Civic Trust Vouchers</div>
+                <div class="amb-feat-desc">Redeem earned points for phone airtime and mobile data bundles.</div>
+              </div>
+              <div class="amb-feat-card">
+                <div class="amb-feat-title">🤝 Street Association Desks</div>
+                <div class="amb-feat-desc">Direct escalation to Discos, municipal water boards, and consumer watchdogs.</div>
+              </div>
+              <div class="amb-feat-card">
+                <div class="amb-feat-title">📜 Verified Merchant Badges</div>
+                <div class="amb-feat-desc">QR codes for honest retail stalls selling at fair benchmark rates.</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 1.75rem; text-align: center;">
+            <div style="font-size: 3rem; margin-bottom: 0.5rem;">🏅</div>
+            <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">Join as a Founding Ambassador</h3>
+            <p style="font-size: 0.85rem; color: #94A3B8; margin-bottom: 1.25rem;">
+              Be recognized as a verified community truth-teller in your neighborhood.
+            </p>
+            <button class="btn btn-wa" onclick="alert('Thank you for your interest! The Ambassador Programme registration opens directly on WhatsApp following the hackathon judging.')">
+              Pre-Register on WhatsApp
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Submit Report Modal -->
+  <div class="modal-overlay" id="reportModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-card">
+      <button class="modal-close" id="closeReportModalBtn" aria-label="Close dialog">&times;</button>
+      <h3 class="modal-title" id="modalTitle">Submit a Local Report</h3>
+      <p class="modal-subtitle">Help your community stay informed. Your report will be cross-referenced with public monitors and verified in seconds.</p>
+
+      <form id="reportSubmissionForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="formCountry">Country</label>
+            <select class="form-select" id="formCountry">
+              <option value="Nigeria" selected>🇳🇬 Nigeria</option>
+              <option value="Kenya">🇰🇪 Kenya</option>
+              <option value="South Africa">🇿🇦 South Africa</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="formCategory">Category</label>
+            <select class="form-select" id="formCategory">
+              <option value="fuel_price">⛽ Fuel / Petrol Price</option>
+              <option value="food_staple">🌾 Food Staple Price</option>
+              <option value="power_status">⚡ Power / Outage Status</option>
+              <option value="water_status">💧 Water Status</option>
+              <option value="rumor_claim">🔍 Circulating Rumor / Claim</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="formLocation">Neighborhood / City / Market</label>
+          <input type="text" class="form-input" id="formLocation" placeholder="e.g. Ikeja, Lagos or Westlands, Nairobi" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="formContent">What did you observe or hear?</label>
+          <textarea class="form-textarea" id="formContent" rows="4" placeholder="e.g. TotalEnergies station on Awolowo Way is selling PMS at ₦865 per litre. Queue is about 5 cars long." required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="formSubmitBtn" style="width:100%; padding:0.75rem; font-size:1rem;">
+          Verify & Publish Report
+        </button>
+      </form>
+
+      <!-- Verification result preview -->
+      <div class="verify-preview-box" id="verifyPreviewBox"></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand">CheckLocal.org</div>
+          <p class="footer-sub">
+            A WhatsApp-first civic truth engine and public web mirror built for the OSF × Andela Hackathon (“Information you can trust”). Empowering transparency, accountability, and social cohesion across Africa through accessible AI.
+          </p>
+        </div>
+        <div>
+          <h4 class="footer-title">Hackathon Tracks</h4>
+          <ul class="footer-links">
+            <li><a href="#">Transparency & Accountability</a></li>
+            <li><a href="#">Stability & Social Cohesion</a></li>
+            <li><a href="/docs" target="_blank">FastAPI Swagger Docs</a></li>
+            <li><a href="/api/trending">REST API Endpoints</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-title">Connect & Verify</h4>
+          <ul class="footer-links">
+            <li><a href="https://wa.me/2348122432599" target="_blank">WhatsApp Hotline</a></li>
+            <li><a href="#simulator">Interactive Bot Simulator</a></li>
+            <li><a href="#openReportModalBtn" onclick="document.getElementById('openReportModalBtn').click()">Web Submission Desk</a></li>
+            <li><a href="#">GitHub Open Source</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 CheckLocal. Open Source Civic Tech. Built with Google Gemini AI & Python FastAPI.</div>
+        <div style="display:flex; gap:12px;">
+          <span>🇳🇬 Nigeria</span>
+          <span>🇰🇪 Kenya</span>
+          <span>🇿🇦 South Africa</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/static/js/whatsapp_simulator.js"></script>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
