@@ -47,13 +47,17 @@ async def submit_report(payload: ReportCreateRequest, db: Session = Depends(get_
         verified_summary_pidgin=verification.get("verified_summary_pidgin", ""),
         sources=", ".join(verification.get("sources", [])),
         next_action=verification.get("next_action", ""),
-        points_awarded=points_earned
+        points_awarded=points_earned,
+        meter_number=verification.get("meter_number"),
+        disco_name=verification.get("disco_name"),
+        hours_supplied=str(verification.get("reported_hours")) if verification.get("reported_hours") else None
     )
     db.add(report)
     
     # Also push as a fresh trending fact or increment cluster
+    is_power = report.category == "power_status"
     trending_item = TrendingFactModel(
-        title=f"Update: {report.category.replace('_', ' ').title()} in {report.location}",
+        title=f"{'PowerWatch Feeder Audit: ' if is_power else 'Update: '}{report.category.replace('_', ' ').title()} in {report.location}",
         country=report.country,
         location=report.location,
         category=report.category,
@@ -65,6 +69,10 @@ async def submit_report(payload: ReportCreateRequest, db: Session = Depends(get_
         report_count=1,
         upvotes=1,
         is_hot=True,
+        disco_name=verification.get("disco_name"),
+        feeder_name=f"{report.location.split(',')[0]} Feeder" if is_power else None,
+        docket_ready=is_power,
+        docket_number=f"PW-NERC-2026-LIVE-{report.id or 101:03d}" if is_power else None,
         updated_at=datetime.utcnow()
     )
     db.add(trending_item)

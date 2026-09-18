@@ -1,42 +1,42 @@
-# CheckLocal (WhatsApp-First Civic Fact-Checking Platform)
+# PowerWatch by CheckLocal
+### Civic Electricity Tariff & Outage Evidentiary Watchdog
 
 [![Hackathon: OSF x Andela](https://img.shields.io/badge/Hackathon-OSF%20%C3%97%20Andela%202026-059669.svg)](https://andela.com)
 [![Track: Transparency & Accountability](https://img.shields.io/badge/Track-Transparency%20%26%20Accountability-047857.svg)](#)
-[![Track: Stability & Social Cohesion](https://img.shields.io/badge/Track-Stability%20%26%20Social%20Cohesion-065F46.svg)](#)
+[![Statutory Precedent: NERC MYTO & Sec 63](https://img.shields.io/badge/Precedent-NERC%20MYTO%20%26%20Sec%2063-blue.svg)](#)
+[![High Court: AfriForum v NERSA](https://img.shields.io/badge/Judicial-Pretoria%20High%20Court-amber.svg)](#)
 [![Python: 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110%2B-009688.svg)](https://fastapi.tiangolo.com)
 [![Google Gemini AI](https://img.shields.io/badge/AI-Google%20Gemini%203.7%20Flash-4285F4.svg)](https://ai.google.dev)
 [![AI Methodology](https://img.shields.io/badge/Methodology-Responsible%20AI%20Architecture-purple.svg)](AI_METHODOLOGY.md)
 
-> **"Information you can trust — where people actually live and talk: on WhatsApp."**
+> **"Ground-truth power accountability — from citizen WhatsApp outage logs to subpoena-grade regulatory complaint dockets."**
 > 
-> 📄 **Reviewers & Judges**: Please see [AI_METHODOLOGY.md](AI_METHODOLOGY.md) for our detailed breakdown on responsible AI architecture, anti-hallucination guardrails, and Nigerian Pidgin localization.
+> 📄 **Reviewers & Judges**: Please see [AI_METHODOLOGY.md](AI_METHODOLOGY.md) for our responsible AI architecture, anti-hallucination guardrails, and multilingual vernacular translation engine (Nigerian Pidgin, Kiswahili, Yoruba, Hausa, isiZulu).
 
 ---
 
-## 🌍 Hackathon Context & Core Problem
+## 🌍 Hackathon Context & The Accountability Vacuum
 
-- **Hackathon**: OSF × Andela Hackathon – *“Information you can trust”* (Deadline: 21 September 2026)
+- **Hackathon**: OSF × Andela Hackathon – *“Information you can trust”* (Submission Deadline: 21 September 2026)
 - **Primary Track**: Transparency & Accountability
 - **Secondary Track**: Stability & Social Cohesion
-- **Focus Countries**: **Nigeria** (primary), **Kenya**, **South Africa**
+- **Focus Countries**: **Nigeria** (Primary), **South Africa**
 
-### The Daily Reality
-Ordinary people in Lagos, Nairobi, and Johannesburg get the vast majority of their daily civic and cost-of-living information—fuel prices, food commodity rates, power blackouts, and water cuts—via **family and neighborhood WhatsApp groups**. 
+### The Core Problem: Phantom Power & Band A Tariff Exploitation
+In Nigeria, electricity distribution companies (DisCos) classify thousands of neighborhoods as **Band A Feeders**, levying premium tariff rates of **₦206.80 to ₦209.50 per kWh** on the statutory promise of at least **20.0 hours of electricity daily**. In reality, millions receive only 4 to 8 hours of light while being billed at peak Band A rates.
 
-During price shocks or grid collapses:
-1. **Unverified rumors spread virally** (e.g., false claims of sudden fuel price drops, fake strike declarations, manufactured shortages).
-2. **Official regulatory websites are slow, hard to reach, or low in public trust**.
-3. **Panic-buying ensues**, causing social anxiety, hoarding, and extortion by unscrupulous middlemen.
+In South Africa, municipal electricity distributors implement unauthorized "load reduction" cuts and levy municipal surcharges without mandatory regulatory approvals.
 
-### The CheckLocal Solution
-**CheckLocal** is a **WhatsApp-first civic verification engine + public web mirror**.
-Citizens simply forward a message, voice note, receipt, or text claim directly to CheckLocal on WhatsApp. In **under 15 seconds**, CheckLocal replies in **Plain English and Nigerian Pidgin** with:
-1. **A verified factual summary**
-2. **Confidence rating + cross-referenced sources** (community reports + regulatory benchmarks)
-3. **One clear next action** (e.g., reporting price gouging to consumer watchdogs or sharing a debunk notice with street associations)
-4. **Civic Trust Points** to incentivize constructive reporting
-5. **A public web trending mirror** so anyone without WhatsApp can search and view verified community facts in real time.
+### Why Individual Consumers Lose
+When an individual citizen complains to a utility, they are dismissed as a "localized fault" or an "isolated breaker trip." Utilities possess a total monopoly on information and control the substation switching logs.
+
+### The PowerWatch Solution: Upward Accountability
+**PowerWatch by CheckLocal** converts citizen WhatsApp complaints into collective, legally actionable evidence:
+1. **Meter-Bound Intake on WhatsApp**: Citizens report outages alongside their 11-digit prepaid or credit meter numbers.
+2. **AI Corroboration & Deficit Calculation**: Gemini AI extracts the utility, feeder, meter, and supply duration, matching the report against statutory benchmarks (Section 63 Electricity Act 2023 / NERC MYTO Supplementary Orders).
+3. **Subpoena-Grade Regulatory Dispute Dockets**: When 10+ meters on a distribution feeder corroborate under-delivery, PowerWatch automatically generates an official legal complaint docket demanding an audit of the DisCo's raw SCADA substation telemetry, mandatory feeder downgrade to Band C (₦68/kWh), and retrospective token credit refunds.
+4. **Phase 2 Roadmap: Micro-IoT Ground-Truth Anchor (Coming Soon)**: Low-cost $6–$10 cellular smart plugs deployed in community hubs to continuously stream voltage telemetry, double-locking citizen evidence against utility denial.
 
 ---
 

@@ -2,13 +2,136 @@ from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
 from app.models import TrendingFactModel, BenchmarkModel
 
-def seed_database_if_empty(db: Session):
+def seed_database_if_empty(db: Session, force_refresh: bool = False):
     existing_facts = db.query(TrendingFactModel).count()
-    if existing_facts > 0:
-        return  # Already seeded
+    
+    # Check if PowerWatch feeders already exist
+    power_facts = db.query(TrendingFactModel).filter(TrendingFactModel.feeder_name.isnot(None)).count()
+    if existing_facts > 0 and power_facts >= 3 and not force_refresh:
+        return  # Already seeded with powerwatch data
+        
+    if force_refresh or power_facts < 3:
+        # Clear existing to ensure clean consistent schema
+        db.query(TrendingFactModel).delete()
+        db.query(BenchmarkModel).delete()
+        db.commit()
         
     facts = [
-        # --- NIGERIA (Primary Focus) ---
+        # --- POWERWATCH: NIGERIA FEEDER AUDITS (Primary Focus) ---
+        TrendingFactModel(
+            title="Magodo Phase 2 33kV Feeder: Band A Tariff Under-Delivery Audit",
+            country="Nigeria",
+            location="Lagos (Magodo Phase 2, Shangisha, CMD Road)",
+            category="power_status",
+            summary_en="DisCo (Ikeja Electric) is billing connected consumers at Band A rates (₦206.80/kWh) requiring ≥ 20.0 hrs/day. Crowdsourced meter telemetry across 48 verified accounts corroborates an actual 14-day average of only 6.8 hrs/day (13.2-hr daily deficit). Formal NERC Dispute Docket generated demanding SCADA subpoena and tariff downgrade.",
+            summary_pidgin="Ikeja Electric dey charge Magodo Phase 2 people Band A rate of ₦206.80/kWh wey suppose get 20 hours light every day, but community light average na only 6.8 hours. Overbilling dispute petition don ready for NERC Forum Office.",
+            summary_yoruba="Iroyin Ina Magodo: Ile-ise Ikeja Electric n gba owo Band A (₦206.80/kWh) ti o ye ki o fun ni wakati ogun (20h), sugbon wakati mefa pere (6.8h) ni ina n de. A ti ko iwe ejo si NERC.",
+            summary_hausa="Binciken Wutar Magodo: Kamfanin Ikeja Electric yana cajin kudin Band A na ₦206.80/kWh wanda ya kamata a ba da wuta ta awa 20 a rana, amma awa 6.8 kacal ake samu. An shirya takardar korafi zuwa NERC.",
+            summary_swahili="Uchunguzi wa Umeme Magodo: Kampuni ya umeme inatoza viwango vya juu vya Band A kwa ahadi ya masaa 20 ya umeme, lakini inatoa masaa 6.8 pekee kwa siku.",
+            summary_zulu="Ukucwaningwa Kukagesi: Inkampani kagesi ibiza intengo ephezulu ye-Band A ngesithembiso samahora angama-20, kodwa inikeza amahora angama-6.8 kuphela.",
+            confidence_level="Verified",
+            sources="48 Corroborated Smart Meters + Feeder Substation Telemetry Audit + NERC MYTO Baseline",
+            action="Download official NERC Dispute Docket #PW-NERC-2026-IKEDC-042 to join the collective tariff refund petition.",
+            report_count=48,
+            upvotes=34,
+            is_hot=True,
+            # PowerWatch Feeder Attributes
+            feeder_name="Magodo Phase 2 33kV Feeder",
+            disco_name="Ikeja Electric Plc",
+            tariff_band="Band A (Statutory ≥ 20.0 hrs/day)",
+            promised_hours="20.0",
+            actual_hours_avg="6.8",
+            overbilling_differential="₦138.80 / kWh overcharge",
+            docket_ready=True,
+            docket_number="PW-NERC-2026-IKEDC-042",
+            updated_at=datetime.utcnow() - timedelta(minutes=18)
+        ),
+        TrendingFactModel(
+            title="Gwarinpa 11kV Feeder: AEDC Band A Tariff Breach & Refund Demand",
+            country="Nigeria",
+            location="Abuja FCT (Gwarinpa Estate, 1st - 7th Avenues)",
+            category="power_status",
+            summary_en="AEDC is billing Gwarinpa residents at Band A (₦209.50/kWh) while delivering an average of 5.2 hrs/day across 64 monitored meters. Precedent: NERC previously fined AEDC ₦200M for overbilling non-qualifying feeders. Collective docket ready for submission to NERC Abuja Forum Office.",
+            summary_pidgin="AEDC dey bill Gwarinpa at Band A (₦209.50/kWh) but light average na only 5.2 hours daily. Remember say NERC don fine AEDC ₦200 million before for this same overbilling. Download petition to demand your token refund.",
+            summary_yoruba="Iroyin Ina Abuja Gwarinpa: AEDC n gba owo Band A ₦209.50/kWh sugbon wakati marun (5.2h) pere ni ina n wa. NERC ti gba itanran ₦200m lowo AEDC ri lori iru e.",
+            summary_hausa="Hukuncin Wutar Gwarinpa: AEDC na cajin kudin Band A na ₦209.50/kWh alhali wuta awa 5.2 kacal take zuwa a rana. An shirya takardar shigar da kara ga NERC.",
+            summary_swahili="Mgogoro wa Ushuru wa Umeme Abuja: AEDC inatoza kiwango cha juu cha Band A wakati umeme unapatikana kwa masaa 5.2 tu kwa siku.",
+            summary_zulu="Ukubizwa Kwezindleko Ezingekho Emthethweni: I-AEDC ibiza intengo ephezulu kanti ugesi ufika amahora ama-5.2 kuphela ngosuku.",
+            confidence_level="Verified",
+            sources="64 Corroborated Resident Meters + NERC Enforcement Records + Estate HOA Log",
+            action="Generate NERC Regulatory Petition #PW-NERC-2026-AEDC-019 to compel AEDC to refund overbilled token units.",
+            report_count=64,
+            upvotes=51,
+            is_hot=True,
+            # PowerWatch Feeder Attributes
+            feeder_name="Gwarinpa 11kV Radial Feeder",
+            disco_name="Abuja Electricity Distribution Company (AEDC)",
+            tariff_band="Band A (Statutory ≥ 20.0 hrs/day)",
+            promised_hours="20.0",
+            actual_hours_avg="5.2",
+            overbilling_differential="₦141.50 / kWh overcharge",
+            docket_ready=True,
+            docket_number="PW-NERC-2026-AEDC-019",
+            updated_at=datetime.utcnow() - timedelta(minutes=42)
+        ),
+        TrendingFactModel(
+            title="Lekki Phase 1 Express 33kV Feeder: Band A Supply Deficit",
+            country="Nigeria",
+            location="Lagos (Lekki Phase 1, Admiralty Way)",
+            category="power_status",
+            summary_en="Eko DisCo (EKEDC) Lekki Phase 1 feeder recorded 8.5 hrs/day average over 30 days against statutory 20-hour Band A threshold. Community audit of 52 verified meters shows 57.5% supply shortfall. Petition requests immediate reclassification to Band C.",
+            summary_pidgin="EKEDC Lekki Phase 1 feeder dey give 8.5 hours instead of 20 hours Band A entitlement. Overbilling differential na ₦138.80 per kWh. Legal docket ready for NERC Lagos Forum.",
+            summary_yoruba="Iroyin Ina Lekki: Ile-ise EKEDC n fun Lekki Phase 1 ni wakati 8.5 pere dipo wakati 20 ti won gba owo le lori. Iwe ejo ti se tan.",
+            summary_hausa="Wutar Lekki Phase 1: Kamfanin EKEDC yana ba da wuta ta awa 8.5 a maimakon awa 20. An fara binciken doka.",
+            summary_swahili="Uchunguzi wa Umeme Lekki: Usambazaji wa umeme ni masaa 8.5 badala ya masaa 20 yaliyoahidiwa chini ya Band A.",
+            summary_zulu="Ukushoda Kukagesi: Abathengi bathola amahora ayi-8.5 esikhundleni samahora angama-20 ngaphansi kwe-Band A.",
+            confidence_level="High",
+            sources="52 Verified Prepaid Meters + Admiralty Ratepayers Outage Registry",
+            action="Join Lekki Ratepayers Coalition on Docket #PW-NERC-2026-EKEDC-077 to enforce Band C reclassification.",
+            report_count=52,
+            upvotes=39,
+            is_hot=True,
+            feeder_name="Lekki Phase 1 Express 33kV Feeder",
+            disco_name="Eko Electricity Distribution Company (EKEDC)",
+            tariff_band="Band A (Statutory ≥ 20.0 hrs/day)",
+            promised_hours="20.0",
+            actual_hours_avg="8.5",
+            overbilling_differential="₦138.80 / kWh overcharge",
+            docket_ready=True,
+            docket_number="PW-NERC-2026-EKEDC-077",
+            updated_at=datetime.utcnow() - timedelta(hours=1, minutes=15)
+        ),
+
+        # --- POWERWATCH: SOUTH AFRICA MUNICIPAL TARIFF AUDIT ---
+        TrendingFactModel(
+            title="City Power JHB: Alexandra Grid Load Reduction & Unlawful Surcharge",
+            country="South Africa",
+            location="Johannesburg (Alexandra & Sandton Border)",
+            category="power_status",
+            summary_en="City Power is subjecting township consumers to unnotified 8-hour daily load reduction alongside an unapproved municipal surcharge. Precedent: Pretoria High Court (AfriForum v NERSA) ruled municipal tariff approvals without compliant Cost-of-Supply studies unconstitutional. NERSA dispute docket active.",
+            summary_pidgin="City Power for Joburg dey cut light 8 hours daily for Alexandra and dey charge extra municipal fee wey Pretoria High Court talk say illegal because no Cost-of-Supply study. Dispute docket ready for NERSA.",
+            summary_zulu="Isinqumo Senkantolo: Inkantolo Ephakeme yase-Pretoria (AfriForum v NERSA) inqume ukuthi izindleko zikagesi zikamasipala ezingenazo izifundo ze-Cost-of-Supply azikho emthethweni. Ugesi ucinywa amahora ayisi-8 e-Alexandra.",
+            summary_swahili="Mgogoro wa Umeme Johannesburg: Mahakama Kuu ya Pretoria iliamua kuwa viwango vya umeme vya manispaa bila utafiti wa gharama si halali.",
+            summary_yoruba="Iroyin Ina South Africa: Ile-ejo giga Pretoria ti pase pe owo ina afikun ti ijoba ibile gba lai se iwadi je arufin.",
+            summary_hausa="Wutar Afirka ta Kudu: Kotun Pretoria ta yanke hukuncin cewa karin kudin wutar lantarki ba tare da cikakken bincike ba haramun ne.",
+            confidence_level="Verified",
+            sources="38 Corroborated Meters + Pretoria High Court Ruling (AfriForum v NERSA) + City Power Switching Logs",
+            action="Lodge objection with NERSA via Docket #PW-NERSA-2026-JHB-008 to challenge unlawful municipal surcharge.",
+            report_count=38,
+            upvotes=26,
+            is_hot=True,
+            feeder_name="Alexandra Municipal Distribution Network",
+            disco_name="City Power Johannesburg / Eskom",
+            tariff_band="Municipal Domestic Surcharge",
+            promised_hours="24.0",
+            actual_hours_avg="16.0",
+            overbilling_differential="R200 / month unlawful surcharge",
+            docket_ready=True,
+            docket_number="PW-NERSA-2026-JHB-008",
+            updated_at=datetime.utcnow() - timedelta(hours=2)
+        ),
+
+        # --- VERIFIED CIVIC BENCHMARKS (Nigeria & Regional) ---
         TrendingFactModel(
             title="Petrol (PMS) Retail Price Benchmark",
             country="Nigeria",
@@ -25,8 +148,8 @@ def seed_database_if_empty(db: Session):
             action="Avoid roadside black market boys selling at ₦1,200. Report any station hoarding fuel above NMDPRA guidance.",
             report_count=42,
             upvotes=18,
-            is_hot=True,
-            updated_at=datetime.utcnow() - timedelta(minutes=24)
+            is_hot=False,
+            updated_at=datetime.utcnow() - timedelta(hours=2, minutes=24)
         ),
         TrendingFactModel(
             title="Garri (Yellow & White) Mile 12 & Bodija Market Rates",
@@ -44,27 +167,8 @@ def seed_database_if_empty(db: Session):
             action="Buy from inner market stalls rather than expressway gates to get the best wholesale rate.",
             report_count=31,
             upvotes=14,
-            is_hot=True,
-            updated_at=datetime.utcnow() - timedelta(hours=1, minutes=10)
-        ),
-        TrendingFactModel(
-            title="Ikeja Electric Feeder Outage Update",
-            country="Nigeria",
-            location="Lagos (Oregun, Allen Avenue, Ikeja GRA)",
-            category="power_status",
-            summary_en="Temporary 33kV line tripping along the Maryland-Alausa injection substation. Ikeja Electric technicians are on site; power restoration expected by 4:00 PM.",
-            summary_pidgin="NEPA line trip Maryland-Alausa side. Ikeja Electric people dey ground dey fix the cable. Light suppose show by 4:00 PM today.",
-            summary_yoruba="Atunse Ina Monamona: Waya 33kV ja ni agbegbe Maryland-Alausa. Awon onise Ikeja Electric ti wa nibe lati tun se. Ina ma de ni ago merin irole.",
-            summary_hausa="Gyaran Wutar Lantarki: Layin wuta ya katse a Maryland-Alausa. Ma'aikata suna aiki don dawo da wuta da karfe 4:00 na yamma.",
-            summary_swahili="Kukatika kwa Umeme: Mafundi wanarekebisha njia ya umeme ya Maryland-Alausa. Umeme unatarajiwa kurejea saa kumi jioni.",
-            summary_zulu="Ukucinywa Kukagesi: Abasebenzi balungisa izintambo zikagesi. Ugesi kulindeleke ukuthi ubuye ngo-4 ntambama.",
-            confidence_level="Verified",
-            sources="Ikeja Electric (IE) Customer Notice + 19 Resident confirmations",
-            action="Turn off sensitive electronics before power returns to prevent surge damage.",
-            report_count=19,
-            upvotes=9,
-            is_hot=True,
-            updated_at=datetime.utcnow() - timedelta(minutes=45)
+            is_hot=False,
+            updated_at=datetime.utcnow() - timedelta(hours=3, minutes=10)
         ),
         TrendingFactModel(
             title="DEBUNKED: Rumor on Sudden Petrol Price Slash to ₦450",
@@ -82,89 +186,9 @@ def seed_database_if_empty(db: Session):
             action="Share this debunk notice to any WhatsApp group forwarding the false voice note.",
             report_count=67,
             upvotes=45,
-            is_hot=True,
-            updated_at=datetime.utcnow() - timedelta(minutes=15)
-        ),
-        TrendingFactModel(
-            title="50kg Bag of Foreign & Local Parboiled Rice",
-            country="Nigeria",
-            location="Abuja (Wuse & Utako Markets)",
-            category="food_staple",
-            summary_en="Local parboiled rice 50kg bag is averaging ₦78,000 to ₦82,000. Foreign long grain is averaging ₦88,000 to ₦94,000 across major distributors in Abuja.",
-            summary_pidgin="Bag of local rice for Wuse market na between ₦78k and ₦82k. Foreign rice dey hover around ₦90k. Supply dey stable for now.",
-            summary_yoruba="Iye Iresi: Apo iresi ibile 50kg wa laarin ₦78,000 si ₦82,000 ni oja Wuse ni Abuja.",
-            summary_hausa="Farashin Shinkafa: Bukar shinkafar gida mai nauyin kilo 50 tana tsakanin ₦78,000 zuwa ₦82,000 a kasuwar Wuse da Utako.",
-            summary_swahili="Bei ya Mchele: Mfuko wa kilo 50 wa mchele unauzwa kati ya ₦78,000 na ₦82,000 katika soko la Wuse mjini Abuja.",
-            summary_zulu="Ilayisi: Isikhwama se-50kg selayisi sibiza phakathi kuka-₦78,000 no-₦82,000 e-Abuja.",
-            confidence_level="High",
-            sources="18 Wholesaler reports + FCT Consumer Price Monitor",
-            action="Form cooperative buying groups with neighbors to purchase at distributor bulk price.",
-            report_count=18,
-            upvotes=11,
-            is_hot=False,
-            updated_at=datetime.utcnow() - timedelta(hours=3)
-        ),
-        
-        # --- KENYA ---
-        TrendingFactModel(
-            title="Super Petrol & Diesel EPRA Pump Price",
-            country="Kenya",
-            location="Nairobi (CBD, Westlands, Industrial Area)",
-            category="fuel_price",
-            summary_en="Super Petrol remains capped at KSh 188.84 per litre; Diesel at KSh 176.60 in Nairobi following EPRA's monthly pricing cycle. Rubis and Total stations adhering to official ceiling.",
-            summary_pidgin="Petrol for Nairobi dey sell for KSh 188.84 per litre, diesel na KSh 176.60. All petrol stations dey follow the official government price.",
-            summary_swahili="Bei Rasmi ya Mafuta: Petroli inauzwa kwa KSh 188.84 kwa lita, na Dizeli kwa KSh 176.60 jijini Nairobi kulingana na bei ya EPRA. Vituo vyote vinafuata mwongozo.",
-            summary_yoruba="Owo Epo ni Kenya: Epo petrol duro ni KSh 188.84 fun lita ni ilu Nairobi gege bi ijoba EPRA se fi lele.",
-            summary_hausa="Farashin Fetur a Kenya: Farashin fetur a Nairobi shine KSh 188.84 kan kowace lita karkashin ka'idar hukumar EPRA.",
-            summary_zulu="Intengo Kaphethiloli e-Kenya: Uphethiloli e-Nairobi ubiza u-KSh 188.84 nge-litre ngokusho kwe-EPRA.",
-            confidence_level="Verified",
-            sources="EPRA Official Gazette + 28 Matatu driver reports",
-            action="Report any station overcharging above EPRA maximum pump price via EPRA SMS hotline 22446.",
-            report_count=28,
-            upvotes=15,
-            is_hot=True,
-            updated_at=datetime.utcnow() - timedelta(hours=2)
-        ),
-        TrendingFactModel(
-            title="2kg Maize Flour (Unga) Retail Rate",
-            country="Kenya",
-            location="Nairobi & Kisumu",
-            category="food_staple",
-            summary_en="A 2kg packet of premium maize meal (Jogoo, Pembe) is retailing between KSh 135 and KSh 150 across Naivas, Quickmart, and estate dukas.",
-            summary_pidgin="2kg Unga (maize flour) for Nairobi supermarkets dey between KSh 135 and KSh 150. Food plenty for shelf.",
-            summary_swahili="Bei ya Unga wa Mahindi: Pakiti ya kilo 2 ya unga (Jogoo, Pembe) inauzwa kati ya KSh 135 na KSh 150 katika maduka makuu kama Naivas na Quickmart.",
-            summary_yoruba="Owo Ounje Unga: Apo unga 2kg n ta laarin KSh 135 si KSh 150 ni awon soobu nla ni ilu Nairobi.",
-            summary_hausa="Farashin Unga: Kilo 2 na garin masara (Unga) yana tsakanin KSh 135 zuwa KSh 150 a manyan kantuna.",
-            summary_zulu="Impuphu: I-Unga ye-2kg ibiza phakathi kuka-KSh 135 no-KSh 150 ezitolo ezinkulu zase-Nairobi.",
-            confidence_level="High",
-            sources="35 Citizen price submissions + Supermarket shelf surveys",
-            action="Compare retail promotions between estate shops and supermarket chains before buying in bulk.",
-            report_count=35,
-            upvotes=8,
             is_hot=False,
             updated_at=datetime.utcnow() - timedelta(hours=4)
         ),
-        TrendingFactModel(
-            title="Kenya Power (KPLC) Planned Maintenance Outage",
-            country="Kenya",
-            location="Nairobi (Kilimani, Lavington, Kileleshwa)",
-            category="power_status",
-            summary_en="Scheduled network maintenance ongoing until 5:00 PM. Affected areas include Dennis Pritt Rd, State House Crescent, and parts of Argwings Kodhek.",
-            summary_pidgin="Kenya Power dey do maintenance work for Kilimani area till 5:00 PM today. Power go return once them finish work.",
-            summary_swahili="Matengenezo ya Umeme (KPLC): Shughuli za matengenezo zinaendelea maeneo ya Kilimani na Lavington hadi saa kumi na moja jioni. Umeme utarejea punde baada ya kazi kukamilika.",
-            summary_yoruba="Atunse Ina KPLC: Ile-ise ina Kenya Power n se atunse waya ni Kilimani titi di ago marun irole.",
-            summary_hausa="Gyaran Wutar KPLC: Kamfanin Kenya Power yana aikin gyara a Kilimani har zuwa karfe 5:00 na yamma.",
-            summary_zulu="Ukulungiswa Kukagesi: I-Kenya Power ilungisa izintambo kagesi e-Kilimani kuze kube u-5 ntambama.",
-            confidence_level="Verified",
-            sources="KPLC Scheduled Outage Notice + Kilimani Residents Association",
-            action="Plan generator/inverter usage accordingly; KPLC helpline: 97771.",
-            report_count=22,
-            upvotes=12,
-            is_hot=False,
-            updated_at=datetime.utcnow() - timedelta(hours=1, minutes=30)
-        ),
-
-        # --- SOUTH AFRICA ---
         TrendingFactModel(
             title="Unleaded 95 & Diesel Inland Fuel Prices",
             country="South Africa",
@@ -181,46 +205,27 @@ def seed_database_if_empty(db: Session):
             action="Check fuel rewards programs (e.g. FNB eBucks, Discovery Insure) to earn cash back at pumps.",
             report_count=29,
             upvotes=16,
-            is_hot=True,
-            updated_at=datetime.utcnow() - timedelta(hours=2, minutes=15)
-        ),
-        TrendingFactModel(
-            title="Eskom National Grid & Load Shedding Status",
-            country="South Africa",
-            location="National (Eskom & City Power)",
-            category="power_status",
-            summary_en="Load shedding remains suspended nationwide due to sustained generation capacity. Local outages in Roodepoort are due to localized cable theft, not stage load shedding.",
-            summary_pidgin="No national load shedding today! Power dey steady. Only small area for Roodepoort get issue because thiefs cut cable.",
-            summary_zulu="Isimo Sikagesi (Eskom): Ukucinywa kukagesi (load shedding) kusamisiwe ezweni lonke. Ukucima kukagesi e-Roodepoort kubangelwa ukwebiwa kwezintambo.",
-            summary_swahili="Hali ya Umeme Eskom: Hakuna mgao wa umeme (load shedding) kitaifa leo nchini Afrika Kusini. Umeme uko thabiti.",
-            summary_yoruba="Ina Monamona ni South Africa: Ko si ikuna ina gbogbo orile-ede (load shedding) loni. Ina duro daadaa.",
-            summary_hausa="Wutar Lantarki a Eskom: Babu dauke wuta a fadin kasar Afirka ta Kudu a yau.",
-            confidence_level="High",
-            sources="Eskom Media Briefing + City Power JHB Crisis Desk",
-            action="Report cable vandalism or illegal connections to City Power Crime Stop: 0800 002 587.",
-            report_count=48,
-            upvotes=27,
-            is_hot=True,
-            updated_at=datetime.utcnow() - timedelta(minutes=50)
-        ),
-        TrendingFactModel(
-            title="Rand Water Infrastructure Maintenance",
-            country="South Africa",
-            location="Johannesburg South & Soweto",
-            category="water_status",
-            summary_en="Water supply pressure in Crown Gardens and parts of Soweto is recovering after valve replacement at Eikenhof pump station. Full pressure expected within 12 hours.",
-            summary_pidgin="Water pressure dey slowly return after repairs for Eikenhof pump station. Tap suppose dey flow normal by tonight.",
-            summary_zulu="Uphiko Lwamanzi (Rand Water): Umfutho wamanzi ubuyela kancane kancane e-Crown Gardens nase-Soweto ngemuva kokulungiswa kwesiteshi se-Eikenhof.",
-            summary_swahili="Ugavi wa Maji: Shinikizo la maji linarejea polepole katika maeneo ya Crown Gardens na Soweto baada ya ukarabati.",
-            summary_yoruba="Iroyin Omi: Omi ti n pada bo ni sise ntele ni agbegbe Crown Gardens ati Soweto.",
-            summary_hausa="Wadatar Ruwa: Ruwan famfo yana dawowa a hankali a yankunan Crown Gardens da Soweto.",
-            confidence_level="Verified",
-            sources="Johannesburg Water Operations + Ward 54 Councillor Bulletin",
-            action="Keep emergency drinking water stored in clean closed containers.",
-            report_count=17,
-            upvotes=10,
             is_hot=False,
-            updated_at=datetime.utcnow() - timedelta(hours=3, minutes=20)
+            updated_at=datetime.utcnow() - timedelta(hours=5)
+        ),
+        TrendingFactModel(
+            title="Super Petrol & Diesel EPRA Pump Price",
+            country="Kenya",
+            location="Nairobi (CBD, Westlands, Industrial Area)",
+            category="fuel_price",
+            summary_en="Super Petrol remains capped at KSh 188.84 per litre; Diesel at KSh 176.60 in Nairobi following EPRA's monthly pricing cycle. Rubis and Total stations adhering to official ceiling.",
+            summary_pidgin="Petrol for Nairobi dey sell for KSh 188.84 per litre, diesel na KSh 176.60. All petrol stations dey follow the official government price.",
+            summary_swahili="Bei Rasmi ya Mafuta: Petroli inauzwa kwa KSh 188.84 kwa lita, na Dizeli kwa KSh 176.60 jijini Nairobi kulingana na bei ya EPRA. Vituo vyote vinafuata mwongozo.",
+            summary_yoruba="Owo Epo ni Kenya: Epo petrol duro ni KSh 188.84 fun lita ni ilu Nairobi gege bi ijoba EPRA se fi lele.",
+            summary_hausa="Farashin Fetur a Kenya: Farashin fetur a Nairobi shine KSh 188.84 kan kowace lita karkashin ka'idar hukumar EPRA.",
+            summary_zulu="Intengo Kaphethiloli e-Kenya: Uphethiloli e-Nairobi ubiza u-KSh 188.84 nge-litre ngokusho kwe-EPRA.",
+            confidence_level="Verified",
+            sources="EPRA Official Gazette + 28 Matatu driver reports",
+            action="Report any station overcharging above EPRA maximum pump price via EPRA SMS hotline 22446.",
+            report_count=28,
+            upvotes=15,
+            is_hot=False,
+            updated_at=datetime.utcnow() - timedelta(hours=6)
         )
     ]
     
@@ -229,6 +234,22 @@ def seed_database_if_empty(db: Session):
         
     # Benchmarks
     benchmarks = [
+        BenchmarkModel(
+            country="Nigeria",
+            category="power_status",
+            item_name="NERC Band A Electricity Tariff Statutory Minimum",
+            official_rate="20.0 Hours/Day Mandatory Minimum (Tariff: ₦206.80 – ₦209.50/kWh)",
+            official_source="NERC Supplementary Order to MYTO & Section 63 Electricity Act 2023",
+            hotline_contact="NERC Complaints: complaints@nerc.gov.ng / 09-462-1400"
+        ),
+        BenchmarkModel(
+            country="South Africa",
+            category="power_status",
+            item_name="Municipal Electricity Tariff & Cost-of-Supply Mandate",
+            official_rate="Cost-of-Supply (CoS) Study Approval Required by High Court",
+            official_source="Pretoria High Court Ruling (AfriForum v NERSA) & Electricity Regulation Act",
+            hotline_contact="NERSA Compliance: +27 12 401 4600 / complaints@nersa.org.za"
+        ),
         BenchmarkModel(
             country="Nigeria",
             category="fuel_price",
@@ -244,14 +265,6 @@ def seed_database_if_empty(db: Session):
             official_rate="₦2,200 - ₦2,600 / Paint Bucket (Lagos Markets)",
             official_source="Lagos State Bureau of Statistics Food Commodity Survey",
             hotline_contact="FCCPC Consumer Complaints: 0805-820-2020"
-        ),
-        BenchmarkModel(
-            country="Nigeria",
-            category="power_status",
-            item_name="Electricity Distribution (Disco Tariff Band A-D)",
-            official_rate="NERC Multi-Year Tariff Order (MYTO)",
-            official_source="NERC / Disco Customer Service Desks",
-            hotline_contact="NERC Complaints: complaints@nerc.gov.ng / 09-462-1400"
         ),
         BenchmarkModel(
             country="Kenya",

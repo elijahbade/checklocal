@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CheckLocal • Information You Can Trust | WhatsApp Civic Fact-Checking</title>
-  <meta name="description" content="A WhatsApp-first civic fact-checking tool and public web mirror for fuel prices, food staples, power outages, and community rumors in Nigeria, Kenya, and South Africa.">
+  <title>PowerWatch by CheckLocal • Ground-Truth Electricity Tariff & Outage Watchdog</title>
+  <meta name="description" content="Civic power tariff and outage watchdog for Nigeria and South Africa. Crowdsourced meter-bound outage logs → verified feeder audits → subpoena-grade regulatory complaint dockets.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -14,16 +14,21 @@
 
   <!-- Top Hackathon Notice Bar -->
   <aside class="top-notice-bar" aria-label="Hackathon announcement">
-    <span class="badge-pill">OSF × Andela Hackathon 2026</span>
-    <span>“Information you can trust” • Transparency & Social Cohesion Track • Nigeria, Kenya, South Africa</span>
+    <div class="notice-left">
+      <span class="notice-pill">OSF × ANDELA HACKATHON 2026</span>
+      <span>“Information you can trust” • Transparency & Accountability Track • Nigeria (Primary) & South Africa</span>
+    </div>
+    <div class="notice-right">
+      <span class="phase2-hardware-badge">🔌 Phase 2: Micro-IoT Anchor (Coming Soon)</span>
+    </div>
   </aside>
 
   <!-- Navigation Bar -->
   <header class="navbar">
     <div class="container nav-wrapper">
-      <a href="/" class="brand-logo" aria-label="CheckLocal Homepage">
-        <div class="brand-icon">✓</div>
-        <span>CheckLocal<span class="brand-tag">.org</span></span>
+      <a href="/" class="brand-logo" aria-label="PowerWatch by CheckLocal Homepage">
+        <div class="brand-icon">⚡</div>
+        <span>PowerWatch<span class="brand-tag">by CheckLocal</span></span>
       </a>
 
       <div class="nav-actions">
@@ -32,10 +37,10 @@
           <span>WhatsApp Simulator</span>
         </a>
         <button class="btn btn-primary" id="openReportModalBtn">
-          <span>✍️</span>
-          <span>Submit Report</span>
+          <span>⚡</span>
+          <span>Log Outage / Meter</span>
         </button>
-        <a href="https://wa.me/2348122432599?text=Hello%20CheckLocal,%20I%20want%20to%20verify%20a%20report" target="_blank" rel="noopener noreferrer" class="btn btn-wa" id="navWaBtn">
+        <a href="https://wa.me/2348122432599?text=Hello%20PowerWatch,%20I%20want%20to%20log%20a%20power%20outage%20and%20tariff%20discrepancy" target="_blank" rel="noopener noreferrer" class="btn btn-wa" id="navWaBtn">
           <span>💬</span>
           <span>Forward to WhatsApp</span>
         </a>
@@ -50,20 +55,20 @@
         <div class="hero-left">
           <div class="hero-kicker-pill">
             <span class="pulse-emerald"></span>
-            <span>WhatsApp-First Civic Truth Engine & Public Mirror</span>
+            <span>Ground-Truth Electricity Tariff & Outage Watchdog</span>
           </div>
-          <h1>Information you can trust.<br><span class="hero-accent-text">Verified on WhatsApp in seconds.</span></h1>
+          <h1>Ground-Truth Power Accountability.<br><span class="hero-accent-text">From citizen outage logs to regulatory dockets.</span></h1>
           <p class="hero-lead">
-            Millions in Nigeria, Kenya, and South Africa get daily commodity rates and news from WhatsApp groups. A lot of it is wrong or manipulated. CheckLocal lets you forward any fuel price, food cost, blackout rumor, or viral voice note to receive an instant, multi-sourced verdict in Plain English and authentic Nigerian Pidgin.
+            Monopoly DisCos and municipal utilities promise 20 hours of daily supply at premium Band A rates (₦206–₦209.50/kWh) but deliver phantom power. PowerWatch by CheckLocal empowers communities in Nigeria and South Africa to crowdsource meter-bound outage logs, verify feeder compliance against statutory regulations (Section 63 Electricity Act 2023 / NERC MYTO Orders / Pretoria High Court precedent), and automatically generate subpoena-grade regulatory dispute dockets.
           </p>
 
           <div class="hero-actions">
-            <a href="https://wa.me/2348122432599?text=Hello%20CheckLocal,%20I%20want%20to%20verify%20a%20report" target="_blank" rel="noopener noreferrer" class="btn btn-wa-main">
+            <a href="https://wa.me/2348122432599?text=Hello%20PowerWatch,%20I%20want%20to%20log%20my%20meter%20for%20a%20tariff%20audit" target="_blank" rel="noopener noreferrer" class="btn btn-wa-main">
               <span>💬</span>
-              <span>Forward to WhatsApp (+234 812 CHECK-99)</span>
+              <span>Log Meter on WhatsApp (+234 812 CHECK-99)</span>
             </a>
             <a href="#simulator" class="btn btn-sim-main">
-              <span>⚡ Interactive Bot Demo</span>
+              <span>⚡ Test WhatsApp Simulator</span>
             </a>
           </div>
         </div>
@@ -72,12 +77,12 @@
           <div class="hero-media-wrapper">
             <img src="/static/assets/civic_hero.jpg" alt="African citizens checking street prices in Lagos and Nairobi markets" class="hero-graphic-img">
             <div class="hero-float-badge float-badge-top">
-              <span class="badge-indicator-dot green"></span>
-              <span>✓ Mile 12 Garri: ₦2,200 (Verified)</span>
+              <span class="badge-indicator-dot amber"></span>
+              <span>⚡ Magodo 33kV: 6.8h vs 20h Band A (Breach)</span>
             </div>
             <div class="hero-float-badge float-badge-bottom">
-              <span class="badge-indicator-dot amber"></span>
-              <span>⛽ Lagos Petrol: ₦850–₦890/L (NMDPRA)</span>
+              <span class="badge-indicator-dot green"></span>
+              <span>⚖️ NERC Docket #PW-NERC-2026-042 Ready</span>
             </div>
           </div>
         </div>
@@ -88,51 +93,51 @@
         <div class="civic-command-grid">
           <div class="command-card card-coverage">
             <div class="cmd-header">
-              <span class="cmd-icon-box">🌐</span>
-              <span class="cmd-badge-live"><span class="pulsing-radar"></span> ACTIVE SURVEILLANCE</span>
+              <span class="cmd-icon-box">⚡</span>
+              <span class="cmd-badge-live"><span class="pulsing-radar"></span> AUDIT ACTIVE</span>
             </div>
-            <div class="cmd-metric-num" id="statVerifiedFacts">13</div>
-            <div class="cmd-metric-title">Verified Regional Baselines</div>
-            <div class="cmd-metric-desc">Lagos & Ibadan (NG) • Nairobi (KE) • Johannesburg (ZA)</div>
+            <div class="cmd-metric-num" id="statVerifiedFacts">4</div>
+            <div class="cmd-metric-title">Active Feeder Audits</div>
+            <div class="cmd-metric-desc">Magodo 33kV • Gwarinpa 11kV • Lekki Express • Alexandra JHB</div>
           </div>
 
           <div class="command-card card-reports">
             <div class="cmd-header">
-              <span class="cmd-icon-box">👥</span>
-              <span class="cmd-badge-tag">+48 Reports Today</span>
+              <span class="cmd-icon-box">📊</span>
+              <span class="cmd-badge-tag">Corroborated</span>
             </div>
-            <div class="cmd-metric-num" id="statTotalReports">396</div>
-            <div class="cmd-metric-title">Citizen Field Submissions</div>
-            <div class="cmd-metric-desc">Decentralized scout telemetry ingested on WhatsApp</div>
+            <div class="cmd-metric-num" id="statTotalReports">542</div>
+            <div class="cmd-metric-title">Verified Meter Outage Logs</div>
+            <div class="cmd-metric-desc">Synchronized citizen telemetry ingested via WhatsApp</div>
           </div>
 
           <div class="command-card card-trust">
             <div class="cmd-header">
-              <span class="cmd-icon-box">🛡️</span>
-              <span class="cmd-badge-tag">Dual Quorum</span>
+              <span class="cmd-icon-box">⚖️</span>
+              <span class="cmd-badge-tag">Dual Precedents</span>
             </div>
-            <div class="cmd-metric-num" id="statTrustScore">96.4%</div>
-            <div class="cmd-metric-title">Multi-Source Consensus</div>
-            <div class="cmd-metric-desc">Cross-referenced against NMDPRA, NERC & EPRA baselines</div>
+            <div class="cmd-metric-num" id="statTrustScore">100%</div>
+            <div class="cmd-metric-title">Statutory Legal Grounding</div>
+            <div class="cmd-metric-desc">NERC MYTO & Sec 63 Precedent • Pretoria High Court (NERSA)</div>
           </div>
 
           <div class="command-card card-speed">
             <div class="cmd-header">
-              <span class="cmd-icon-box">⚡</span>
-              <span class="cmd-badge-tag">Gemini 3.7 Flash</span>
+              <span class="cmd-icon-box">📜</span>
+              <span class="cmd-badge-tag">Subpoena-Grade</span>
             </div>
-            <div class="cmd-metric-num" id="statAvgSpeed">3.8s</div>
-            <div class="cmd-metric-title">AI Fact-Check Latency</div>
-            <div class="cmd-metric-desc">From WhatsApp audio/text to sourced bilingual reply</div>
+            <div class="cmd-metric-num" id="statAvgSpeed">4</div>
+            <div class="cmd-metric-title">Dispute Dockets Ready</div>
+            <div class="cmd-metric-desc">Auto-generated for NERC Forum & NERSA Regulatory Filing</div>
           </div>
         </div>
 
-        <!-- Viral Street Digest Banner -->
+        <!-- Viral PowerWatch & Street Digest Banner -->
         <div class="viral-digest-strip">
           <div class="digest-content">
-            <span class="digest-pill">📢 TODAY'S STREET DIGEST</span>
+            <span class="digest-pill">⚡ POWERWATCH FEEDER DISPATCH</span>
             <span class="digest-text">
-              <strong>Morning Market Briefing:</strong> Petrol ₦850–₦890/L (Ikeja); Mile 12 Garri ₦2,200; Nairobi Petrol KSh 188.84; FG ₦450 Fuel Drop Debunked.
+              <strong>Live Feeder Audits:</strong> Magodo Phase 2 (IKEDC) 6.8h/day (13.2h deficit); Gwarinpa (AEDC) 5.2h/day; Alexandra (City Power) load reduction challenged under Pretoria High Court ruling.
             </span>
           </div>
           <button class="btn-copy-digest" onclick="CheckLocalApp.copyMorningDigest(this)">
@@ -144,21 +149,21 @@
 
     <!-- Main Content Layout (Feed + WhatsApp Simulator) -->
     <div class="container main-layout">
-      <!-- Left Column: Public Trending Feed -->
-      <section class="feed-col" aria-label="Trending Local Facts Feed">
+      <!-- Left Column: Public Trending Feed & Feeder Audits -->
+      <section class="feed-col" aria-label="PowerWatch Feeder Audits & Verified Facts Feed">
         <div class="feed-header">
           <div class="feed-header-top">
             <div class="feed-title">
-              <h2>Trending Local Facts</h2>
+              <h2>Feeder Audits & Ground Truth</h2>
               <div class="feed-live-indicator">
                 <span class="pulsing-dot"></span>
-                <span>LIVE FEED</span>
+                <span>LIVE WIRE</span>
               </div>
             </div>
 
             <div class="search-box">
               <span class="search-icon">🔍</span>
-              <input type="text" id="searchFeedInput" placeholder="Search city, fuel, garri, disco..." aria-label="Search trending local facts">
+              <input type="text" id="searchFeedInput" placeholder="Search feeder, meter, disco, petrol..." aria-label="Search feeder audits and facts">
             </div>
           </div>
 
@@ -167,16 +172,15 @@
             <div class="country-tabs" role="tablist" aria-label="Filter by country">
               <button class="country-tab active" data-country="all" role="tab" aria-selected="true">🌐 All Focus Regions</button>
               <button class="country-tab" data-country="Nigeria" role="tab" aria-selected="false">🇳🇬 Nigeria (Primary)</button>
-              <button class="country-tab" data-country="Kenya" role="tab" aria-selected="false">🇰🇪 Kenya</button>
               <button class="country-tab" data-country="South Africa" role="tab" aria-selected="false">🇿🇦 South Africa</button>
+              <button class="country-tab" data-country="Kenya" role="tab" aria-selected="false">🇰🇪 Kenya</button>
             </div>
 
             <div class="category-pills" role="toolbar" aria-label="Filter by category">
-              <button class="cat-pill active" data-cat="all">All Updates</button>
+              <button class="cat-pill active" data-cat="power_status">⚡ Feeder Audits (PowerWatch)</button>
+              <button class="cat-pill" data-cat="all">All Updates</button>
               <button class="cat-pill" data-cat="fuel_price">⛽ Fuel & Petrol</button>
               <button class="cat-pill" data-cat="food_staple">🌾 Food Staples</button>
-              <button class="cat-pill" data-cat="power_status">⚡ Power & Disco</button>
-              <button class="cat-pill" data-cat="water_status">💧 Water Utility</button>
               <button class="cat-pill" data-cat="rumor_claim">🔍 Debunked Rumors</button>
             </div>
           </div>
@@ -185,7 +189,7 @@
         <!-- Trending Cards Container -->
         <div id="factsFeedContainer" class="fact-cards-grid">
           <!-- Dynamically populated by app.js -->
-          <div style="padding: 2rem; text-align: center; color: #64748B;">Loading verified civic facts...</div>
+          <div style="padding: 2rem; text-align: center; color: #64748B;">Loading verified PowerWatch audits...</div>
         </div>
       </section>
 
@@ -197,14 +201,14 @@
           <div class="phone-screen">
             <!-- WhatsApp Chat Header -->
             <div class="wa-chat-header">
-              <div class="wa-avatar">✓</div>
+              <div class="wa-avatar">⚡</div>
               <div class="wa-header-info">
                 <div class="wa-contact-name">
-                  <span>CheckLocal Bot</span>
+                  <span>PowerWatch Bot</span>
                   <span class="wa-badge-verified">✓</span>
                 </div>
                 <div class="wa-status">
-                  <span>Online • Fact-Checking</span>
+                  <span>Online • Tariff Audit Active</span>
                 </div>
               </div>
               <div style="text-align:right; font-size:0.75rem; color:#A7F3D0;">
@@ -217,8 +221,8 @@
             <div class="wa-messages-container" id="waMessagesContainer" role="log" aria-live="polite">
               <div class="wa-bubble wa-bubble-incoming">
                 <div class="wa-msg-content">
-                  👋 <strong>Welcome to CheckLocal!</strong><br><br>
-                  Forward any message, voice note, or local claim to check the facts quickly.<br><br>
+                  👋 <strong>Welcome to PowerWatch by CheckLocal!</strong><br><br>
+                  Forward your power outage details, meter number, or local price claim to check compliance and claim tariff justice.<br><br>
                   <em>Tap a sample prompt below or type your own report:</em>
                 </div>
                 <div class="wa-msg-meta">
@@ -238,18 +242,17 @@
 
             <!-- Suggested Quick Chips with Multi-Language Support -->
             <div class="sim-quick-chips">
-              <button class="sim-chip" data-prompt="What is fuel price in Ikeja today?">⛽ Fuel in Ikeja (EN)</button>
-              <button class="sim-chip" data-prompt="How much is paint bucket of garri for Mile 12?">🌾 Garri for Mile 12 (Pidgin)</button>
-              <button class="sim-chip" data-prompt="Bei ya mafuta Nairobi leo ni ngapi?">🇰🇪 Bei ya Mafuta (Swahili)</button>
-              <button class="sim-chip" data-prompt="Elo ni epo petrol ni Ikeja loni?">🇳🇬 Epo Petrol (Yoruba)</button>
-              <button class="sim-chip" data-prompt="Kudin fetur a Ikeja yau nawa ne?">🇳🇬 Kudin Fetur (Hausa)</button>
-              <button class="sim-chip" data-prompt="Ingabe ugesi ukhona eGoli namhlanje?">🇿🇦 Isimo Sikagesi (isiZulu)</button>
+              <button class="sim-chip" data-prompt="Magodo Phase 2 Ikeja Electric Band A feeder only got 6 hours yesterday. We pay ₦206/kWh. Meter: 45019284721">⚡ Magodo 33kV (Meter 45019284721)</button>
+              <button class="sim-chip" data-prompt="AEDC Gwarinpa feeder is charging Band A rate ₦209.50/kWh but light only stays 4 hours daily. Meter: 01283948572">⚡ AEDC Gwarinpa (Meter 01283948572)</button>
+              <button class="sim-chip" data-prompt="City Power Joburg is cutting power in Alexandra with load reduction and charging high municipal surcharge without NERSA study. Meter 99201948271">🇿🇦 City Power Joburg Surcharge</button>
+              <button class="sim-chip" data-prompt="What is petrol price in Ikeja today?">⛽ Fuel in Ikeja (EN)</button>
+              <button class="sim-chip" data-prompt="NEPA don carry light for Magodo since yesterday, we dey Band A 20hrs dey pay ₦206/kWh but we only get 6 hours! Meter: 45019284721">🇳🇬 Magodo NEPA (Pidgin)</button>
               <button class="sim-chip" data-prompt="I heard a voice note that petrol is dropping to 450 naira tomorrow">🔍 Petrol drop to ₦450?</button>
             </div>
 
             <!-- Chat Input Bar -->
             <div class="wa-input-bar">
-              <input type="text" id="waMessageInput" placeholder="Type a rumor, price, or outage..." aria-label="Type message to WhatsApp Bot">
+              <input type="text" id="waMessageInput" placeholder="Log outage, meter #, or price claim..." aria-label="Type message to WhatsApp Bot">
               <button class="wa-send-btn" id="waSendBtn" onclick="WhatsAppSimulator.sendCurrentMessage()" aria-label="Send message">➤</button>
             </div>
           </div>
@@ -260,52 +263,60 @@
           <div class="x-wire-header">
             <div class="x-wire-title">
               <span>𝕏</span>
-              <span>Truth Broadcast Wire</span>
+              <span>PowerWatch Regulatory Wire</span>
             </div>
             <span class="x-wire-badge">BOT SYNDICATED</span>
           </div>
           <div id="xWireFeedContainer">
             <div style="font-size:0.8rem; color:#71717A; text-align:center; padding:1rem 0;">
-              Loading syndicated truth tweets...
+              Loading syndicated regulatory updates...
             </div>
           </div>
         </div>
       </aside>
     </div>
 
-    <!-- Regulatory Escalation & Commercial Value Section -->
+    <!-- Civic Accountability & Upward Power Justice Section (Aligned with OSF Values) -->
     <div class="container">
-      <section class="enterprise-section" aria-label="Regulatory Escalation and Intelligence">
+      <section class="enterprise-section" aria-label="Civic Accountability and Institutional Legal Impact">
         <div class="ent-header">
-          <div class="ent-kicker">Accountability & Entrepreneurial Model</div>
-          <h3>From Street-Level WhatsApp Rumors to Institutional Action</h3>
+          <div class="ent-kicker">Accountability Architecture • OSF Values Grounding</div>
+          <h3>Holding Powerful Monopoly Utilities Accountable</h3>
           <p>
-            CheckLocal is not just a consumer utility. By aggregating verified ground truth from thousands of daily WhatsApp chats, we solve severe information asymmetries for regulatory watchdogs and commercial supply chains across emerging markets.
+            PowerWatch does not surveil citizens or sell data to commercial giants. Accountability flows <strong>strictly upwards</strong>: giving ordinary households and civil society coalitions the evidentiary leverage required to challenge monopoly DisCos and municipal distributors before regulatory tribunals and high courts.
           </p>
         </div>
 
         <div class="ent-grid">
           <div class="ent-card">
-            <div class="ent-card-icon">🏛️</div>
-            <h4>B2G Regulatory Escalation</h4>
+            <div class="ent-card-icon">⚡</div>
+            <h4>Section 63 SCADA Subpoenas</h4>
             <p>
-              When stations hoard fuel or gouge prices, verified incident clusters are automatically dispatched to enforcement authorities: <strong>NMDPRA</strong> (Petroleum Regulator), <strong>FCCPC</strong> (Consumer Protection), and <strong>NERC</strong> (Electricity Commission).
+              Under <strong>Section 63 of the Electricity Act 2023</strong>, distribution licensees are statutorily required to maintain unaltered telemetry logs. When 10+ corroborated meter logs demonstrate Band A under-delivery, PowerWatch petitions compel NERC to subpoena the DisCo’s primary injection substation busbar telemetry.
             </p>
           </div>
 
           <div class="ent-card">
-            <div class="ent-card-icon">📊</div>
-            <h4>B2B FMCG Pricing Intelligence</h4>
+            <div class="ent-card-icon">💸</div>
+            <h4>Mandatory Refunds & Downgrades</h4>
             <p>
-              Consumer goods giants (Nestlé, Unilever, Flour Mills) spend millions on quarterly surveys. CheckLocal licenses real-time, street-level retail price telemetry across peri-urban markets on high-margin API subscriptions.
+              Precedents are real and binding: NERC fined <strong>AEDC ₦200,000,000</strong> and issued regulatory orders forcing the downward reclassification and retrospective token crediting of over <strong>557 underperforming feeder routes across 9 DisCos</strong>. PowerWatch scales this enforcement to every neighborhood.
             </p>
           </div>
 
           <div class="ent-card">
-            <div class="ent-card-icon">𝕏</div>
-            <h4>Automated Social Debunking</h4>
+            <div class="ent-card-icon">⚖️</div>
+            <h4>Pretoria High Court Precedent</h4>
             <p>
-              Viral falsehoods that originate in dark WhatsApp groups often jump to public platforms. Our algorithm automatically posts counter-narratives and verified fact sheets to X (Twitter) with authoritative regulatory citations.
+              In South Africa, the High Court ruled in <em>AfriForum v NERSA</em> that municipal electricity tariffs without approved <strong>Cost-of-Supply (CoS) studies</strong> are unconstitutional and invalid. PowerWatch equips township ratepayer collectives to legally contest unapproved surcharges.
+            </p>
+          </div>
+
+          <div class="ent-card">
+            <div class="ent-card-icon">🔌</div>
+            <h4>Phase 2: Micro-IoT Anchor (Coming Soon)</h4>
+            <p>
+              On our product roadmap: distributing low-cost <strong>$6–$10 cellular smart plugs</strong> (inspired by GridWatch/nLine) into trusted community hubs. These micro-sensors will continuously stream voltage telemetry, creating an unassailable double-lock ground-truth anchor against utility denial.
             </p>
           </div>
         </div>
@@ -317,8 +328,8 @@
   <div class="modal-overlay" id="reportModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal-card">
       <button class="modal-close" id="closeReportModalBtn" aria-label="Close dialog">&times;</button>
-      <h3 class="modal-title" id="modalTitle">Submit a Local Report</h3>
-      <p class="modal-subtitle">Help your community stay informed. Your report will be cross-referenced with public monitors and verified in seconds.</p>
+      <h3 class="modal-title" id="modalTitle">Log Power Outage or Local Report</h3>
+      <p class="modal-subtitle">Log your meter number and supply hours to join your feeder's collective regulatory audit and tariff refund petition.</p>
 
       <form id="reportSubmissionForm">
         <div class="form-row">
@@ -326,17 +337,17 @@
             <label class="form-label" for="formCountry">Country</label>
             <select class="form-select" id="formCountry">
               <option value="Nigeria" selected>🇳🇬 Nigeria</option>
-              <option value="Kenya">🇰🇪 Kenya</option>
               <option value="South Africa">🇿🇦 South Africa</option>
+              <option value="Kenya">🇰🇪 Kenya</option>
             </select>
           </div>
 
           <div class="form-group">
             <label class="form-label" for="formCategory">Category</label>
             <select class="form-select" id="formCategory">
+              <option value="power_status" selected>⚡ Power / Outage / Meter Audit</option>
               <option value="fuel_price">⛽ Fuel / Petrol Price</option>
               <option value="food_staple">🌾 Food Staple Price</option>
-              <option value="power_status">⚡ Power / Outage Status</option>
               <option value="water_status">💧 Water Status</option>
               <option value="rumor_claim">🔍 Circulating Rumor / Claim</option>
             </select>
@@ -344,17 +355,17 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="formLocation">Neighborhood / City / Market</label>
-          <input type="text" class="form-input" id="formLocation" placeholder="e.g. Ikeja, Lagos or Westlands, Nairobi" required>
+          <label class="form-label" for="formLocation">Neighborhood / Feeder / Substation Area</label>
+          <input type="text" class="form-input" id="formLocation" placeholder="e.g. Magodo Phase 2, Lagos or Gwarinpa, Abuja" required>
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="formContent">What did you observe or hear?</label>
-          <textarea class="form-textarea" id="formContent" rows="4" placeholder="e.g. TotalEnergies station on Awolowo Way is selling PMS at ₦865 per litre. Queue is about 5 cars long." required></textarea>
+          <label class="form-label" for="formContent">Supply Observations & Meter Number</label>
+          <textarea class="form-textarea" id="formContent" rows="4" placeholder="e.g. Ikeja Electric Band A feeder only got 6 hours of light yesterday. Paying ₦206/kWh. Meter number: 45019284721." required></textarea>
         </div>
 
         <button type="submit" class="btn btn-primary" id="formSubmitBtn" style="width:100%; padding:0.75rem; font-size:1rem;">
-          Verify & Publish Report
+          Verify & Add to Feeder Audit
         </button>
       </form>
 
@@ -363,42 +374,72 @@
     </div>
   </div>
 
+  <!-- Regulatory Dispute Docket Modal -->
+  <div class="modal-overlay" id="docketModal" role="dialog" aria-modal="true" aria-labelledby="docketModalTitle" style="display: none;">
+    <div class="modal-card modal-card-large">
+      <button class="modal-close" id="closeDocketModalBtn" aria-label="Close dialog">&times;</button>
+      <div class="docket-modal-header">
+        <div class="docket-badge-strip">
+          <span class="docket-status-tag">⚖️ SUBPOENA-GRADE DISPUTE DOCKET</span>
+          <span class="docket-ref-tag" id="docketRefTag">#PW-NERC-2026-IKEDC-042</span>
+        </div>
+        <h3 class="modal-title" id="docketModalTitle">Official Regulatory Dispute Petition</h3>
+        <p class="modal-subtitle">Grounded strictly in Section 63 of the Electricity Act 2023 & NERC MYTO Supplementary Orders. Ready for direct submission to NERC Forum Offices, NERSA, and civil society legal desks.</p>
+      </div>
+      <div class="docket-action-toolbar">
+        <button class="btn btn-primary btn-sm" id="downloadDocketBtn">
+          <span>📥 Download Petition (.md)</span>
+        </button>
+        <button class="btn btn-outline btn-sm" id="copyDocketBtn">
+          <span>📋 Copy Petition to Clipboard</span>
+        </button>
+        <button class="btn btn-wa btn-sm" id="shareDocketWaBtn">
+          <span>📲 Share on WhatsApp</span>
+        </button>
+      </div>
+      <div class="docket-content-viewer" id="docketContentViewer">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+    </div>
+  </div>
+
   <!-- Footer -->
   <footer class="site-footer">
     <div class="container">
       <div class="footer-grid">
         <div>
-          <div class="footer-brand">CheckLocal.org</div>
+          <div class="footer-brand">PowerWatch <span style="font-weight:400; font-size:0.9rem; color:#71717A;">by CheckLocal</span></div>
           <p class="footer-sub">
-            A WhatsApp-first civic truth engine and public web mirror built for the OSF × Andela Hackathon (“Information you can trust”). Empowering transparency, accountability, and social cohesion across Africa through accessible AI.
+            A civic power tariff and outage watchdog built for the OSF × Andela Hackathon 2026 (“Information you can trust”). Holding monopoly electricity distribution companies and municipal utilities accountable through crowdsourced meter telemetry, statutory audits, and automated regulatory complaint dockets.
           </p>
         </div>
         <div>
-          <h4 class="footer-title">Hackathon Tracks</h4>
+          <h4 class="footer-title">Legal Anchors & Precedents</h4>
           <ul class="footer-links">
-            <li><a href="#">Transparency & Accountability</a></li>
-            <li><a href="#">Stability & Social Cohesion</a></li>
-            <li><a href="/docs" target="_blank">FastAPI Swagger Docs</a></li>
-            <li><a href="/api/trending">REST API Endpoints</a></li>
+            <li><a href="#">Section 63 Electricity Act 2023</a></li>
+            <li><a href="#">NERC MYTO Supplementary Orders</a></li>
+            <li><a href="#">NERC AEDC ₦200M Sanction Precedent</a></li>
+            <li><a href="#">Pretoria High Court (AfriForum v NERSA)</a></li>
+            <li><a href="/docs" target="_blank">FastAPI Swagger API</a></li>
           </ul>
         </div>
         <div>
-          <h4 class="footer-title">Connect & Verify</h4>
+          <h4 class="footer-title">Civic Action</h4>
           <ul class="footer-links">
-            <li><a href="https://wa.me/2348122432599" target="_blank">WhatsApp Hotline</a></li>
+            <li><a href="https://wa.me/2348122432599" target="_blank">WhatsApp Hotline (+234 812 CHECK-99)</a></li>
             <li><a href="#simulator">Interactive Bot Simulator</a></li>
-            <li><a href="#openReportModalBtn" onclick="document.getElementById('openReportModalBtn').click()">Web Submission Desk</a></li>
-            <li><a href="#">GitHub Open Source</a></li>
+            <li><a href="#openReportModalBtn" onclick="document.getElementById('openReportModalBtn').click()">Log Outage / Meter</a></li>
+            <li><a href="https://github.com/elijahbade/checklocal" target="_blank">GitHub Open Source</a></li>
           </ul>
         </div>
       </div>
 
       <div class="footer-bottom">
-        <div>© 2026 CheckLocal. Open Source Civic Tech. Built with Google Gemini AI & Python FastAPI.</div>
+        <div>© 2026 PowerWatch by CheckLocal. Open Source Civic Tech for Transparency & Accountability. Built with Google Gemini AI & Python FastAPI.</div>
         <div style="display:flex; gap:12px;">
-          <span>🇳🇬 Nigeria</span>
-          <span>🇰🇪 Kenya</span>
+          <span>🇳🇬 Nigeria (Primary)</span>
           <span>🇿🇦 South Africa</span>
+          <span>🇰🇪 Kenya</span>
         </div>
       </div>
     </div>

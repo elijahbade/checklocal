@@ -59,11 +59,48 @@ def get_trending_facts(
             "report_count": f.report_count,
             "upvotes": f.upvotes,
             "is_hot": f.is_hot,
-            "escalation_target": "NMDPRA Enforcement" if f.category == "fuel_price" else ("NERC / Disco Watch" if f.category == "power_status" else ("FCCPC Anti-Gouging" if f.category == "food_staple" else "Civil Society FactCheck Wire")),
+            # PowerWatch Feeder Attributes
+            "feeder_name": getattr(f, "feeder_name", None),
+            "disco_name": getattr(f, "disco_name", None),
+            "tariff_band": getattr(f, "tariff_band", None),
+            "promised_hours": getattr(f, "promised_hours", None),
+            "actual_hours_avg": getattr(f, "actual_hours_avg", None),
+            "overbilling_differential": getattr(f, "overbilling_differential", None),
+            "docket_ready": getattr(f, "docket_ready", False) or (f.category == "power_status"),
+            "docket_number": getattr(f, "docket_number", None),
+            "escalation_target": "NERC Regulatory Forum / NERSA" if f.category == "power_status" else ("NMDPRA Enforcement" if f.category == "fuel_price" else ("FCCPC Anti-Gouging" if f.category == "food_staple" else "Civil Society FactCheck Wire")),
             "updated_at": f.updated_at.strftime("%b %d, %Y • %I:%M %p")
         }
         for f in facts
     ]
+
+@router.get("/trending/{fact_id}/docket")
+def get_feeder_docket(fact_id: int, db: Session = Depends(get_db)):
+    """
+    Generates a formal legal petition and regulatory dispute docket
+    ready for submission to NERC Forum Office (Nigeria) or NERSA (South Africa).
+    """
+    from app.services.docket_service import docket_service
+    docket = docket_service.generate_docket_for_fact(fact_id, db)
+    if not docket:
+        raise HTTPException(status_code=404, detail="Dispute docket not found for this record")
+    return docket
+
+@router.get("/trending/{fact_id}/docket/download")
+def download_feeder_docket(fact_id: int, db: Session = Depends(get_db)):
+    """Downloads the formal regulatory petition as a clean markdown/text document."""
+    from fastapi.responses import Response
+    from app.services.docket_service import docket_service
+    docket = docket_service.generate_docket_for_fact(fact_id, db)
+    if not docket:
+        raise HTTPException(status_code=404, detail="Dispute docket not found")
+        
+    filename = f"PowerWatch_Petition_{docket['docket_reference'].replace('/', '_')}.md"
+    return Response(
+        content=docket["markdown_petition"],
+        media_type="text/markdown",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'}
+    )
 
 @router.post("/trending/{fact_id}/upvote")
 def upvote_trending_fact(fact_id: int, db: Session = Depends(get_db)):

@@ -33,6 +33,14 @@ class ReportModel(Base):
     sources = Column(Text, nullable=True)
     next_action = Column(Text, nullable=True)
     points_awarded = Column(Integer, default=10)
+    
+    # PowerWatch Evidentiary Fields
+    meter_number = Column(String(50), nullable=True)
+    disco_name = Column(String(100), nullable=True)
+    feeder_name = Column(String(150), nullable=True)
+    tariff_band = Column(String(50), nullable=True)
+    hours_supplied = Column(String(50), nullable=True)
+    
     created_at = Column(DateTime, default=datetime.utcnow)
 
 class TrendingFactModel(Base):
@@ -55,6 +63,17 @@ class TrendingFactModel(Base):
     report_count = Column(Integer, default=1)
     upvotes = Column(Integer, default=0)
     is_hot = Column(Boolean, default=True)
+    
+    # PowerWatch Feeder Audit & Dispute Docket Attributes
+    feeder_name = Column(String(150), nullable=True)
+    disco_name = Column(String(100), nullable=True)
+    tariff_band = Column(String(50), nullable=True)
+    promised_hours = Column(String(50), nullable=True)
+    actual_hours_avg = Column(String(50), nullable=True)
+    overbilling_differential = Column(String(100), nullable=True)
+    docket_ready = Column(Boolean, default=False)
+    docket_number = Column(String(100), nullable=True)
+    
     updated_at = Column(DateTime, default=datetime.utcnow)
 
 class UserProfileModel(Base):
