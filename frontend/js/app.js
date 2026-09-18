@@ -13,6 +13,7 @@ const CheckLocalApp = {
         this.bindEvents();
         this.loadStats();
         this.loadTrendingFacts();
+        this.loadTweets();
 
         // Initialize simulator
         if (window.WhatsAppSimulator) {
@@ -218,24 +219,96 @@ const CheckLocalApp = {
                         <span><strong>Sources:</strong> ${fact.sources}</span>
                     </div>
 
-                    <div class="action-callout">
-                        <span class="action-icon">👉</span>
-                        <div><strong>Next Action:</strong> ${fact.action}</div>
+                    <div class="card-civic-strip">
+                        <div class="action-callout">
+                            <span class="action-icon">👉</span>
+                            <div><strong>Next Action:</strong> ${fact.action}</div>
+                        </div>
+                        ${fact.escalation_target ? `
+                        <div class="escalation-badge">
+                            <span>🏛️</span>
+                            <span><strong>Escalation Dispatched:</strong> ${fact.escalation_target}</span>
+                        </div>` : ''}
                     </div>
 
                     <div class="card-footer">
                         <span>Updated ${fact.updated_at}</span>
-                        <div style="display:flex;align-items:center;gap:12px;">
-                            <span>${fact.report_count} citizen reports</span>
-                            <button class="btn-upvote" onclick="CheckLocalApp.upvoteFact(${fact.id}, this)">
+                        <div class="card-actions-right">
+                            <span style="font-size:0.75rem;">${fact.report_count} reports</span>
+                            <button class="btn-card-action" onclick="CheckLocalApp.syndicateToTwitter(${fact.id}, this)" title="Syndicate verified fact to X">
+                                <span>𝕏 Post</span>
+                            </button>
+                            <button class="btn-card-action" onclick="CheckLocalApp.upvoteFact(${fact.id}, this)">
                                 <span>👍 Confirmed</span>
-                                <span class="upvote-count">${fact.upvotes}</span>
+                                <span class="upvote-count" style="font-weight:700;">${fact.upvotes}</span>
                             </button>
                         </div>
                     </div>
                 </article>
             `;
         }).join("");
+    },
+
+    async loadTweets() {
+        const container = document.getElementById("xWireFeedContainer");
+        if (!container) return;
+
+        try {
+            const res = await fetch("/api/tweets/recent");
+            const tweets = await res.json();
+
+            if (!tweets || tweets.length === 0) {
+                container.innerHTML = `
+                    <div style="font-size:0.8rem; color:#71717A; text-align:center; padding:1rem 0;">
+                        No syndicated tweets yet. Click "𝕏 Post" on any verified card to broadcast!
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = tweets.map(tweet => `
+                <div class="x-tweet-item">
+                    <div class="x-tweet-text">${tweet.tweet_text}</div>
+                    <div class="x-tweet-meta">
+                        <span>${tweet.tags}</span>
+                        <span>${tweet.posted_at}</span>
+                    </div>
+                </div>
+            `).join("");
+        } catch (err) {
+            console.warn("Could not load tweets:", err);
+            container.innerHTML = `<div style="font-size:0.8rem; color:#EF4444; padding:0.5rem 0;">Failed to load X wire.</div>`;
+        }
+    },
+
+    async syndicateToTwitter(factId, btnEl) {
+        if (!btnEl) return;
+        const originalText = btnEl.innerHTML;
+        btnEl.disabled = true;
+        btnEl.innerHTML = "<span>Posting...</span>";
+
+        try {
+            const res = await fetch(`/api/trending/${factId}/tweet`, { method: "POST" });
+            const data = await res.json();
+
+            if (data.status === "syndicated" || data.status === "already_syndicated") {
+                btnEl.innerHTML = "<span>✓ Broadcasted</span>";
+                btnEl.style.background = "#F4F4F5";
+                btnEl.style.color = "#09090B";
+                // Refresh tweet feed
+                this.loadTweets();
+            } else {
+                btnEl.innerHTML = "<span>Error</span>";
+            }
+        } catch (err) {
+            console.error("Failed to syndicate tweet:", err);
+            btnEl.innerHTML = "<span>Failed</span>";
+        } finally {
+            setTimeout(() => {
+                btnEl.disabled = false;
+                btnEl.innerHTML = originalText;
+            }, 3000);
+        }
     },
 
     switchLang(factId, lang, btnEl) {

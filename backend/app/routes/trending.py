@@ -59,6 +59,7 @@ def get_trending_facts(
             "report_count": f.report_count,
             "upvotes": f.upvotes,
             "is_hot": f.is_hot,
+            "escalation_target": "NMDPRA Enforcement" if f.category == "fuel_price" else ("NERC / Disco Watch" if f.category == "power_status" else ("FCCPC Anti-Gouging" if f.category == "food_staple" else "Civil Society FactCheck Wire")),
             "updated_at": f.updated_at.strftime("%b %d, %Y • %I:%M %p")
         }
         for f in facts
@@ -73,6 +74,31 @@ def upvote_trending_fact(fact_id: int, db: Session = Depends(get_db)):
     fact.upvotes += 1
     db.commit()
     return {"status": "success", "upvotes": fact.upvotes}
+
+@router.get("/tweets/recent")
+def get_recent_tweets():
+    """Returns real-time automated tweets syndicated by CheckLocal to X."""
+    from app.services.twitter_service import twitter_service
+    return twitter_service.get_recent_tweets()
+
+@router.post("/trending/{fact_id}/tweet")
+def syndicate_fact_to_twitter(fact_id: int, db: Session = Depends(get_db)):
+    """Automatically composes and publishes a verified fact to X (Twitter)."""
+    from app.services.twitter_service import twitter_service
+    fact = db.query(TrendingFactModel).filter(TrendingFactModel.id == fact_id).first()
+    if not fact:
+        raise HTTPException(status_code=404, detail="Fact not found")
+    
+    fact_dict = {
+        "id": fact.id,
+        "category": fact.category,
+        "country": fact.country,
+        "location": fact.location,
+        "summary_en": fact.summary_en,
+        "action": fact.action
+    }
+    tweet_result = twitter_service.publish_tweet(fact_dict)
+    return {"status": "success", "tweet": tweet_result}
 
 @router.get("/benchmarks")
 def get_benchmarks(country: Optional[str] = "Nigeria", db: Session = Depends(get_db)):
