@@ -30,7 +30,11 @@ async def test_backend():
         ("What is fuel price in Ikeja today?", "Nigeria"),
         ("How much is paint bucket of garri in Mile 12?", "Nigeria"),
         ("Is there load shedding in Johannesburg?", "South Africa"),
-        ("I heard a voice note that petrol is dropping to 450 naira tomorrow", "Nigeria")
+        ("I heard a voice note that petrol is dropping to 450 naira tomorrow", "Nigeria"),
+        ("Bei ya mafuta Nairobi leo ni ngapi?", "Kenya"),
+        ("Elo ni epo petrol ni Ikeja loni?", "Nigeria"),
+        ("Kudin fetur a Ikeja yau nawa ne?", "Nigeria"),
+        ("Ingabe ugesi ukhona eGoli namhlanje?", "South Africa")
     ]
 
     for q, country in test_queries:

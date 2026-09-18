@@ -183,20 +183,34 @@ const CheckLocalApp = {
 
                     <h3 class="card-title">${fact.title}</h3>
 
-                    <!-- Language Switcher Chips -->
-                    <div class="lang-toggle-bar">
+                    <!-- Multilingual Switcher Chips -->
+                    <div class="lang-toggle-bar" style="overflow-x:auto; padding-bottom:4px;">
                         <button class="lang-chip active" onclick="CheckLocalApp.switchLang(${fact.id}, 'en', this)">English</button>
-                        <button class="lang-chip" onclick="CheckLocalApp.switchLang(${fact.id}, 'pidgin', this)">🇳🇬 Nigerian Pidgin</button>
+                        <button class="lang-chip" onclick="CheckLocalApp.switchLang(${fact.id}, 'pidgin', this)">🇳🇬 Pidgin</button>
+                        ${fact.summary_swahili ? `<button class="lang-chip" onclick="CheckLocalApp.switchLang(${fact.id}, 'swahili', this)">🇰🇪 Kiswahili</button>` : ''}
+                        ${fact.summary_yoruba ? `<button class="lang-chip" onclick="CheckLocalApp.switchLang(${fact.id}, 'yoruba', this)">🇳🇬 Yoruba</button>` : ''}
+                        ${fact.summary_hausa ? `<button class="lang-chip" onclick="CheckLocalApp.switchLang(${fact.id}, 'hausa', this)">🇳🇬 Hausa</button>` : ''}
+                        ${fact.summary_zulu ? `<button class="lang-chip" onclick="CheckLocalApp.switchLang(${fact.id}, 'zulu', this)">🇿🇦 isiZulu</button>` : ''}
                     </div>
 
-                    <!-- English Summary Box -->
+                    <!-- Language Summary Boxes -->
                     <div class="summary-block" id="summary-en-${fact.id}">
                         ${fact.summary_en}
                     </div>
-
-                    <!-- Pidgin Summary Box (hidden initially) -->
                     <div class="summary-block pidgin-box" id="summary-pidgin-${fact.id}" style="display: none;">
                         ${fact.summary_pidgin || fact.summary_en}
+                    </div>
+                    <div class="summary-block" id="summary-swahili-${fact.id}" style="display: none; border-left-color: #0284C7; background: #F0F9FF;">
+                        ${fact.summary_swahili || fact.summary_en}
+                    </div>
+                    <div class="summary-block" id="summary-yoruba-${fact.id}" style="display: none; border-left-color: #7C3AED; background: #F5F3FF;">
+                        ${fact.summary_yoruba || fact.summary_en}
+                    </div>
+                    <div class="summary-block" id="summary-hausa-${fact.id}" style="display: none; border-left-color: #D97706; background: #FFFBEB;">
+                        ${fact.summary_hausa || fact.summary_en}
+                    </div>
+                    <div class="summary-block" id="summary-zulu-${fact.id}" style="display: none; border-left-color: #059669; background: #ECFDF5;">
+                        ${fact.summary_zulu || fact.summary_en}
                     </div>
 
                     <div class="sources-row">
@@ -225,19 +239,16 @@ const CheckLocalApp = {
     },
 
     switchLang(factId, lang, btnEl) {
-        const enBox = document.getElementById(`summary-en-${factId}`);
-        const pidginBox = document.getElementById(`summary-pidgin-${factId}`);
+        const langs = ['en', 'pidgin', 'swahili', 'yoruba', 'hausa', 'zulu'];
+        langs.forEach(l => {
+            const box = document.getElementById(`summary-${l}-${factId}`);
+            if (box) box.style.display = (l === lang) ? "block" : "none";
+        });
+
         const parent = btnEl.parentElement;
-
-        parent.querySelectorAll(".lang-chip").forEach(c => c.classList.remove("active"));
-        btnEl.classList.add("active");
-
-        if (lang === "pidgin") {
-            if (enBox) enBox.style.display = "none";
-            if (pidginBox) pidginBox.style.display = "block";
-        } else {
-            if (enBox) enBox.style.display = "block";
-            if (pidginBox) pidginBox.style.display = "none";
+        if (parent) {
+            parent.querySelectorAll(".lang-chip").forEach(c => c.classList.remove("active"));
+            btnEl.classList.add("active");
         }
     },
 

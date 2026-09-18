@@ -54,15 +54,24 @@ Civic trust is fragile. A single hallucinated fuel price can cause real financia
 
 ---
 
-## 4. Linguistic Accessibility: Bridging the Digital Divide with Nigerian Pidgin
+## 4. Linguistic Accessibility: Bridging the Digital Divide with African Languages
 
-Most AI tools speak only formal Queen's English, immediately alienating millions of market women, transport operators (Danfo/Matatu drivers), and grassroots citizens.
+Most AI tools speak only formal Queen's English, immediately alienating millions of market women, transport operators (Danfo/Matatu drivers), rural elders, and grassroots citizens.
 
-- CheckLocal prompts Gemini to generate a parallel translation in **natural, everyday Nigerian Pidgin English**.
-- For example:
-  - *Plain English*: "Petrol is selling between ₦850 and ₦890 per litre across major stations. No acute scarcity observed."
-  - *Nigerian Pidgin*: "Fuel dey sell around ₦850 to ₦890 for major stations like NNPC and Total. Normal dispensing dey go on, no need to panic buy."
-- This drastically improves comprehension, emotional connection, and trust among everyday citizens.
+CheckLocal leverages Google Gemini 3.7 Flash to pioneer native multilingual civic verification across Africa's most prominent languages:
+
+1. **Nigerian Pidgin English (75M+ speakers)**: Default lingua franca across West Africa, ensuring messages resonate with warmth, clarity, and zero pretension.
+   - *Plain English*: "Petrol is selling between ₦850 and ₦890 per litre across major stations. No acute scarcity observed."
+   - *Nigerian Pidgin*: "Fuel dey sell around ₦850 to ₦890 for major stations like NNPC and Total. Normal dispensing dey go on, no need to panic buy."
+2. **Kiswahili / Swahili (100M+ speakers — Kenya & East Africa)**:
+   - *Kiswahili*: "Petroli inauzwa kwa KSh 188.84 kwa lita Nairobi kulingana na bei ya EPRA. Vituo vyote vinafuata mwongozo."
+3. **Yoruba & Hausa (80M+ speakers — Western & Northern Nigeria)**:
+   - *Yoruba*: "Epo petrol n ta laarin ₦850 si ₦890 fun lita ni awon ile-epo nla. Ko si aini epo kankan."
+   - *Hausa*: "Ana sayar da fetur a kan ₦850 zuwa ₦890 a kowace lita. Babu dogon layi a gidajen mai."
+4. **isiZulu (12M+ speakers — South Africa)**:
+   - *isiZulu*: "Intengo kaphethiloli iwu-R22.86 nge-litre eGoli ngokusho kwe-DMRE."
+
+**Dynamic Inbound Language Detection**: If a citizen texts the WhatsApp bot in Swahili, Yoruba, Hausa, or Zulu, the AI detects the language in real-time and formats the primary response in that language alongside English.
 
 ---
 

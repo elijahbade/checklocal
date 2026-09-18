@@ -141,8 +141,13 @@ Analyze this report and return a strictly valid JSON object with the following k
 - "category": one of ["fuel_price", "food_staple", "power_status", "water_status", "rumor_claim", "other"]
 - "country": "Nigeria", "Kenya", or "South Africa" (default to Nigeria if unclear)
 - "location": specific neighborhood/city/state extracted from report, or "Lagos, Nigeria" if not specified
+- "detected_language": detected language of the user message (one of: "English", "Pidgin", "Swahili", "Yoruba", "Hausa", "isiZulu")
 - "verified_summary_en": 2-3 sentences of clear, factual, objective summary in Plain English. State the prevailing facts, benchmark prices, or debunk if it's a false claim.
-- "verified_summary_pidgin": 2-3 sentences translating the exact same verified summary into natural, warm, everyday Nigerian Pidgin English (e.g. "Fuel for Ikeja dey sell around ₦860 per litre... No need to panic buy").
+- "verified_summary_pidgin": 2-3 sentences translating the exact same verified summary into natural, warm, everyday Nigerian Pidgin English.
+- "verified_summary_swahili": 2-3 sentences translating into natural Kiswahili (Swahili) for East Africa / Kenya.
+- "verified_summary_yoruba": 2-3 sentences translating into natural Yoruba.
+- "verified_summary_hausa": 2-3 sentences translating into natural Hausa.
+- "verified_summary_zulu": 2-3 sentences translating into natural isiZulu for South Africa.
 - "confidence_level": "Verified", "High", "Medium", or "Unverified"
 - "confidence_score": integer between 60 and 98
 - "sources": list of 2-3 realistic verification sources (e.g., ["34 verified citizen reports", "NMDPRA Retail Price Monitor", "Local Market Association Survey"])
@@ -196,8 +201,8 @@ Return ONLY raw JSON, no markdown code fence, no additional commentary.
         category = "rumor_claim"
         location = location_hint or ("Lagos, Nigeria" if country == "Nigeria" else ("Nairobi, Kenya" if country == "Kenya" else "Johannesburg, South Africa"))
         
-        # Check fuel
-        if any(w in lower for w in ["fuel", "petrol", "pms", "diesel", "filling station", "pump", "litres", "per litre", "gas station"]):
+        # Check fuel (English + vernacular: mafuta, epo, fetur, uphethiloli)
+        if any(w in lower for w in ["fuel", "petrol", "pms", "diesel", "filling station", "pump", "litres", "per litre", "gas station", "mafuta", "epo", "fetur", "uphethiloli"]):
             category = "fuel_price"
             kb = BENCHMARK_KNOWLEDGE["fuel"].get(country, BENCHMARK_KNOWLEDGE["fuel"]["Nigeria"])
             summary_en = f"Verified Fuel Price Report: {kb['rate']} Major stations are dispensing without acute queues."
@@ -208,8 +213,8 @@ Return ONLY raw JSON, no markdown code fence, no additional commentary.
             confidence_score = 92
             is_debunked = False
 
-        # Check food staple
-        elif any(w in lower for w in ["garri", "rice", "food", "unga", "maize", "bread", "beans", "cooking oil", "tomato", "market", "bag of"]):
+        # Check food staple (English + vernacular: unga, garri, shinkafa, iresi, ounje, ukudla)
+        elif any(w in lower for w in ["garri", "rice", "food", "unga", "maize", "bread", "beans", "cooking oil", "tomato", "market", "bag of", "shinkafa", "iresi", "ounje", "ukudla"]):
             category = "food_staple"
             if "garri" in lower and country == "Nigeria":
                 food_kb = BENCHMARK_KNOWLEDGE["food"]["Nigeria"]["garri"]
@@ -228,8 +233,8 @@ Return ONLY raw JSON, no markdown code fence, no additional commentary.
             confidence_score = 88
             is_debunked = False
 
-        # Check power / electricity
-        elif any(w in lower for w in ["nepa", "disco", "light", "power", "electricity", "ekedc", "ikedc", "ibedc", "aedc", "eskom", "kplc", "blackout", "load shedding", "transformer"]):
+        # Check power / electricity (English + vernacular: stima, ina, wuta, ugesi, blackout)
+        elif any(w in lower for w in ["nepa", "disco", "light", "power", "electricity", "ekedc", "ikedc", "ibedc", "aedc", "eskom", "kplc", "blackout", "load shedding", "transformer", "stima", "ina", "wuta", "ugesi"]):
             category = "power_status"
             pow_kb = BENCHMARK_KNOWLEDGE["power"].get(country, BENCHMARK_KNOWLEDGE["power"]["Nigeria"])
             summary_en = f"Power Supply Status: {pow_kb['rate']}"
@@ -240,8 +245,8 @@ Return ONLY raw JSON, no markdown code fence, no additional commentary.
             confidence_score = 86
             is_debunked = False
 
-        # Check water status
-        elif any(w in lower for w in ["water", "tap", "borehole", "tanker", "rand water", "pipe"]):
+        # Check water status (English + vernacular: maji, omi, ruwa, amanzi)
+        elif any(w in lower for w in ["water", "tap", "borehole", "tanker", "rand water", "pipe", "maji", "omi", "ruwa", "amanzi"]):
             category = "water_status"
             wat_kb = BENCHMARK_KNOWLEDGE["water"].get(country, BENCHMARK_KNOWLEDGE["water"]["Nigeria"])
             summary_en = f"Water Utility Status: {wat_kb['rate']}"
@@ -259,7 +264,7 @@ Return ONLY raw JSON, no markdown code fence, no additional commentary.
             if is_debunked:
                 summary_en = f"VIRAL CLAIM DEBUNKED: The claim circulating regarding '{text[:60]}...' is unverified and contradicts official public notices. Official regulators have released no such directives."
                 summary_pidgin = f"FAKE NEWS ALERT: That story wey people dey forward say '{text[:50]}...' na lie. No official government source or regulator confirm am. Make una no spread am."
-                action = "Share this verified fact-check with your street and family WhatsApp groups to stop the panic."
+                action = "Share this debunk notice to any WhatsApp group forwarding the false voice note."
                 confidence_level = "Verified"
                 confidence_score = 94
             else:
@@ -271,12 +276,45 @@ Return ONLY raw JSON, no markdown code fence, no additional commentary.
 
             sources = ["CheckLocal Community Sentinel Network", "Regional Consumer Advisory Board"]
 
+        # Detect specific African languages from input text
+        detected_lang = "English"
+        if any(w in lower for w in ["bei", "mafuta", "stima", "pesa", "unga", "ngapi", "leo", "habari", "kplc"]):
+            detected_lang = "Swahili"
+        elif any(w in lower for w in ["elo", "epo", "ina", "owo", "loni", "garri", "se", "kilode", "nibo"]):
+            detected_lang = "Yoruba"
+        elif any(w in lower for w in ["nawa", "kudin", "fetur", "wuta", "yau", "shinkafa", "ruwa"]):
+            detected_lang = "Hausa"
+        elif any(w in lower for w in ["intengo", "uphethiloli", "ugesi", "amanzi", "namhlanje", "malini"]):
+            detected_lang = "isiZulu"
+
+        # Localized translations for regional languages
+        summary_swahili = f"Ripoti ya Uhakiki: Bei ya mafuta ni KSh 188.84 kwa lita (Super Petrol). Huduma zinaendelea bila foleni kubwa."
+        summary_yoruba = f"Iroyin Ijeri: Epo petrol n ta laarin ₦850 si ₦890 fun lita ni awon ile-epo nla. Ko si iwode epo kankan."
+        summary_hausa = f"Rahoton Bincike: Ana sayar da fetur a kan ₦850 zuwa ₦890 a kowace lita. Babu dogon layi a gidajen mai."
+        summary_zulu = f"Umbiko Oqinisekisiwe: Intengo kaphethiloli iwu-R22.86 nge-litre eGoli. Ukutholakala kwamandla kugcinwe ngendlela ejwayelekile."
+
+        if category == "food_staple":
+            summary_swahili = "Ripoti ya Chakula: Unga wa kilo 2 unauzwa kati ya KSh 135 na KSh 150 madukani."
+            summary_yoruba = "Iroyin Ounje: Garri roba kan n ta fun ₦2,200 si ₦2,400 ni oja Mile 12 ati Bodija."
+            summary_hausa = "Farashin Abinci: Bukar shinkafa tana tsakanin ₦78,000 zuwa ₦82,000 a kasuwar Wuse."
+            summary_zulu = "Intengo Yokudla: Ukudla okuyisisekelo kuyatholakala ezitolo ngezintengo ezizinzile."
+        elif category == "power_status":
+            summary_swahili = "Hali ya Umeme: Kenya Power inashughulikia matengenezo; umeme unatarajiwa kurudi kwa ratiba."
+            summary_yoruba = "Iroyin Ina NEPA: Awon onise Discos n se atunse waya ina; ina ma de laipe."
+            summary_hausa = "Halin Wuta: Kamfanin rarraba wuta na aiki don gyara layukan da suka lalace."
+            summary_zulu = "Isimo Sikagesi: Akukho ukucinywa kukagesi kuzwelonke namuhla; amapayipi kagesi ayalungiswa."
+
         return {
             "category": category,
             "country": country,
             "location": location,
+            "detected_language": detected_lang,
             "verified_summary_en": summary_en,
             "verified_summary_pidgin": summary_pidgin,
+            "verified_summary_swahili": summary_swahili,
+            "verified_summary_yoruba": summary_yoruba,
+            "verified_summary_hausa": summary_hausa,
+            "verified_summary_zulu": summary_zulu,
             "confidence_level": confidence_level,
             "confidence_score": confidence_score,
             "sources": sources,
@@ -287,7 +325,7 @@ Return ONLY raw JSON, no markdown code fence, no additional commentary.
     def format_whatsapp_reply(self, data: Dict[str, Any], user_points: int, points_earned: int, user_badge: str) -> str:
         """
         Formats the final WhatsApp message response adhering to hackathon requirements:
-        1. Short verified summary
+        1. Short verified summary (English + user's native local language or Nigerian Pidgin)
         2. Confidence level + sources
         3. One clear next action
         4. Light points system (display only)
@@ -306,15 +344,28 @@ Return ONLY raw JSON, no markdown code fence, no additional commentary.
         confidence = data.get("confidence_level", "High")
         confidence_badge = "🟢 VERIFIED" if confidence in ["Verified", "High"] else "🟡 COMMUNITY CONSENSUS"
 
+        detected_lang = data.get("detected_language", "English")
+
+        # Dynamic Language Section
+        local_lang_section = ""
+        if detected_lang == "Swahili" and data.get("verified_summary_swahili"):
+            local_lang_section = f"\n*In Kiswahili (Swahili 🇰🇪):*\n{data.get('verified_summary_swahili')}\n"
+        elif detected_lang == "Yoruba" and data.get("verified_summary_yoruba"):
+            local_lang_section = f"\n*In Yoruba (🇳🇬):*\n{data.get('verified_summary_yoruba')}\n"
+        elif detected_lang == "Hausa" and data.get("verified_summary_hausa"):
+            local_lang_section = f"\n*In Hausa (🇳🇬):*\n{data.get('verified_summary_hausa')}\n"
+        elif detected_lang == "isiZulu" and data.get("verified_summary_zulu"):
+            local_lang_section = f"\n*In isiZulu (🇿🇦):*\n{data.get('verified_summary_zulu')}\n"
+        else:
+            # Default to Nigerian Pidgin
+            local_lang_section = f"\n*In Nigerian Pidgin:*\n{data.get('verified_summary_pidgin', '')}\n"
+
         reply = f"""*CheckLocal Civic Fact-Check* {category_emoji}
 {confidence_badge} ({data.get('confidence_score', 85)}% confidence)
 
 *In English:*
 {data.get('verified_summary_en', '')}
-
-*In Nigerian Pidgin:*
-{data.get('verified_summary_pidgin', '')}
-
+{local_lang_section}
 *Sources:*
 📌 {sources_formatted}
 

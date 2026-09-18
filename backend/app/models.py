@@ -25,6 +25,11 @@ class ReportModel(Base):
     confidence_score = Column(Integer, default=85)          # 0 - 100
     verified_summary_en = Column(Text, nullable=True)
     verified_summary_pidgin = Column(Text, nullable=True)
+    verified_summary_swahili = Column(Text, nullable=True)
+    verified_summary_yoruba = Column(Text, nullable=True)
+    verified_summary_hausa = Column(Text, nullable=True)
+    verified_summary_zulu = Column(Text, nullable=True)
+    detected_language = Column(String(50), default="English")
     sources = Column(Text, nullable=True)
     next_action = Column(Text, nullable=True)
     points_awarded = Column(Integer, default=10)
@@ -40,6 +45,10 @@ class TrendingFactModel(Base):
     category = Column(String(50), nullable=False)
     summary_en = Column(Text, nullable=False)
     summary_pidgin = Column(Text, nullable=True)
+    summary_swahili = Column(Text, nullable=True)
+    summary_yoruba = Column(Text, nullable=True)
+    summary_hausa = Column(Text, nullable=True)
+    summary_zulu = Column(Text, nullable=True)
     confidence_level = Column(String(50), default="High")
     sources = Column(Text, nullable=False)
     action = Column(Text, nullable=False)
@@ -88,6 +97,11 @@ class VerifyResponse(BaseModel):
     country: str
     verified_summary_en: str
     verified_summary_pidgin: str
+    verified_summary_swahili: Optional[str] = None
+    verified_summary_yoruba: Optional[str] = None
+    verified_summary_hausa: Optional[str] = None
+    verified_summary_zulu: Optional[str] = None
+    detected_language: Optional[str] = "English"
     confidence_level: str
     confidence_score: int
     sources: List[str]
