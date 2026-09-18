@@ -44,46 +44,100 @@
   </header>
 
   <main>
-    <!-- Hero Section -->
-    <section class="hero">
-      <div class="container hero-content">
-        <div class="hero-badge">
-          <span>🛡️</span>
-          <span>WhatsApp-First Civic Verification & Public Mirror</span>
-        </div>
-        <h1>Information you can trust.<br>Direct on WhatsApp, verified in seconds.</h1>
-        <p class="lead">
-          Ordinary citizens across Nigeria, Kenya, and South Africa get daily news and rumors through WhatsApp groups. CheckLocal lets you forward any fuel price, food rate, power blackout, or viral claim to get an instant, sourced fact-check in Plain English and Nigerian Pidgin.
-        </p>
+    <!-- Modern Civic Hero Section -->
+    <section class="hero-section">
+      <div class="container hero-grid">
+        <div class="hero-left">
+          <div class="hero-kicker-pill">
+            <span class="pulse-emerald"></span>
+            <span>WhatsApp-First Civic Truth Engine & Public Mirror</span>
+          </div>
+          <h1>Information you can trust.<br><span class="hero-accent-text">Verified on WhatsApp in seconds.</span></h1>
+          <p class="hero-lead">
+            Millions in Nigeria, Kenya, and South Africa get daily commodity rates and news from WhatsApp groups. A lot of it is wrong or manipulated. CheckLocal lets you forward any fuel price, food cost, blackout rumor, or viral voice note to receive an instant, multi-sourced verdict in Plain English and authentic Nigerian Pidgin.
+          </p>
 
-        <div class="hero-ctas">
-          <a href="https://wa.me/2348122432599?text=Hello%20CheckLocal,%20I%20want%20to%20verify%20a%20report" target="_blank" rel="noopener noreferrer" class="btn btn-wa" style="padding: 0.8rem 1.6rem; font-size: 1rem;">
-            <span style="font-size: 1.2rem;">💬</span>
-            <span>Forward to WhatsApp (+234 812 CHECK-99)</span>
-          </a>
-          <a href="#simulator" class="btn btn-sim" style="padding: 0.8rem 1.4rem; font-size: 1rem;">
-            <span>⚡ Test Bot Live in Browser</span>
-          </a>
+          <div class="hero-actions">
+            <a href="https://wa.me/2348122432599?text=Hello%20CheckLocal,%20I%20want%20to%20verify%20a%20report" target="_blank" rel="noopener noreferrer" class="btn btn-wa-main">
+              <span>💬</span>
+              <span>Forward to WhatsApp (+234 812 CHECK-99)</span>
+            </a>
+            <a href="#simulator" class="btn btn-sim-main">
+              <span>⚡ Interactive Bot Demo</span>
+            </a>
+          </div>
         </div>
 
-        <!-- Real-time Stats Ribbon -->
-        <div class="stats-ribbon">
-          <div class="stat-card">
-            <div class="stat-value" id="statVerifiedFacts">12</div>
-            <div class="stat-label">Verified Regional Facts</div>
+        <div class="hero-right">
+          <div class="hero-media-wrapper">
+            <img src="/static/assets/civic_hero.jpg" alt="African citizens checking street prices in Lagos and Nairobi markets" class="hero-graphic-img">
+            <div class="hero-float-badge float-badge-top">
+              <span class="badge-indicator-dot green"></span>
+              <span>✓ Mile 12 Garri: ₦2,200 (Verified)</span>
+            </div>
+            <div class="hero-float-badge float-badge-bottom">
+              <span class="badge-indicator-dot amber"></span>
+              <span>⛽ Lagos Petrol: ₦850–₦890/L (NMDPRA)</span>
+            </div>
           </div>
-          <div class="stat-card">
-            <div class="stat-value" id="statTotalReports">396</div>
-            <div class="stat-label">Citizen Submissions</div>
+        </div>
+      </div>
+
+      <!-- Multi-Dimensional Civic Command Grid -->
+      <div class="container">
+        <div class="civic-command-grid">
+          <div class="command-card card-coverage">
+            <div class="cmd-header">
+              <span class="cmd-icon-box">🌐</span>
+              <span class="cmd-badge-live"><span class="pulsing-radar"></span> ACTIVE SURVEILLANCE</span>
+            </div>
+            <div class="cmd-metric-num" id="statVerifiedFacts">13</div>
+            <div class="cmd-metric-title">Verified Regional Baselines</div>
+            <div class="cmd-metric-desc">Lagos & Ibadan (NG) • Nairobi (KE) • Johannesburg (ZA)</div>
           </div>
-          <div class="stat-card">
-            <div class="stat-value" id="statTrustScore">96.4%</div>
-            <div class="stat-label">Community Consensus</div>
+
+          <div class="command-card card-reports">
+            <div class="cmd-header">
+              <span class="cmd-icon-box">👥</span>
+              <span class="cmd-badge-tag">+48 Reports Today</span>
+            </div>
+            <div class="cmd-metric-num" id="statTotalReports">396</div>
+            <div class="cmd-metric-title">Citizen Field Submissions</div>
+            <div class="cmd-metric-desc">Decentralized scout telemetry ingested on WhatsApp</div>
           </div>
-          <div class="stat-card">
-            <div class="stat-value" id="statAvgSpeed">3.8s</div>
-            <div class="stat-label">AI Verification Speed</div>
+
+          <div class="command-card card-trust">
+            <div class="cmd-header">
+              <span class="cmd-icon-box">🛡️</span>
+              <span class="cmd-badge-tag">Dual Quorum</span>
+            </div>
+            <div class="cmd-metric-num" id="statTrustScore">96.4%</div>
+            <div class="cmd-metric-title">Multi-Source Consensus</div>
+            <div class="cmd-metric-desc">Cross-referenced against NMDPRA, NERC & EPRA baselines</div>
           </div>
+
+          <div class="command-card card-speed">
+            <div class="cmd-header">
+              <span class="cmd-icon-box">⚡</span>
+              <span class="cmd-badge-tag">Gemini 3.7 Flash</span>
+            </div>
+            <div class="cmd-metric-num" id="statAvgSpeed">3.8s</div>
+            <div class="cmd-metric-title">AI Fact-Check Latency</div>
+            <div class="cmd-metric-desc">From WhatsApp audio/text to sourced bilingual reply</div>
+          </div>
+        </div>
+
+        <!-- Viral Street Digest Banner -->
+        <div class="viral-digest-strip">
+          <div class="digest-content">
+            <span class="digest-pill">📢 TODAY'S STREET DIGEST</span>
+            <span class="digest-text">
+              <strong>Morning Market Briefing:</strong> Petrol ₦850–₦890/L (Ikeja); Mile 12 Garri ₦2,200; Nairobi Petrol KSh 188.84; FG ₦450 Fuel Drop Debunked.
+            </span>
+          </div>
+          <button class="btn-copy-digest" onclick="CheckLocalApp.copyMorningDigest(this)">
+            <span>📲 Copy for WhatsApp Groups</span>
+          </button>
         </div>
       </div>
     </section>
