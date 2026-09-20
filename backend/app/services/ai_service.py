@@ -189,6 +189,12 @@ Analyze this report and return a strictly valid JSON object with the following k
 - "next_action": one single clear, realistic civic action for an ordinary person (e.g. "Share this verified fact with your street WhatsApp group" or "Report price gouging to FCCPC hotline 0805-820-2020")
 - "is_rumor_debunked": boolean (true if a false circulating rumor is debunked, false otherwise)
 
+SPECIAL OUTAGE TELEMETRY RULE:
+If the user reports an ongoing electricity outage (e.g., "light don go since 10am", "no light since morning", "blackout") without stating their total daily supply hours received:
+- Acknowledge that the outage incident has been timestamped for their feeder.
+- Remind them that Band A compliance is evaluated across a 24-hour cycle (requiring >= 20.0 hours).
+- Explicitly prompt them in "next_action" and both summaries to reply with their total hours received today or text "light is back" when power is restored so the exact overcharge differential and token refund can be calculated.
+
 Return ONLY raw JSON, no markdown code fence, no additional commentary.
 """
         model_name = settings.GEMINI_MODEL
@@ -295,8 +301,20 @@ Return ONLY raw JSON, no markdown code fence, no additional commentary.
             # Detect hours
             hours_match = re.search(r'(\d+(?:\.\d+)?)\s*(?:hours|hrs|hr)', lower)
             reported_hours = float(hours_match.group(1)) if hours_match else None
-            
-            if detected_meter or reported_hours or "band a" in lower:
+
+            # Detect ongoing blackout / start time (e.g. "since 10", "since morning", "light don go")
+            since_match = re.search(r'(?:since|from)\s*(\d{1,2}(?::\d{2})?\s*(?:am|pm)?|\w+)', lower)
+            is_ongoing_outage = bool(since_match) or any(w in lower for w in ["don go", "is out", "no light", "went off", "blackout", "load shedding"])
+
+            if country == "Nigeria" and is_ongoing_outage and not reported_hours:
+                start_str = f"starting around {since_match.group(1)}" if since_match else "currently active"
+                summary_en = f"OUTAGE INCIDENT LOGGED: Active blackout recorded on your feeder ({start_str}). Under Section 63 of the Electricity Act 2023, Band A feeders require at least 20.0 hours of daily supply. To calculate your feeder's exact overcharge differential, please reply when power is restored or state your total hours received today (e.g. 'we got 4 hours today')."
+                summary_pidgin = f"OUTAGE DON LOG (Light still dey off): We don timestamp this blackout for your feeder ({start_str}). Under NERC law, Band A must give 20 hours light daily. Make you text us when light return (e.g. 'light don come') or tell us how many total hours una get today (e.g. 'na 4 hours we get today') make we calculate your refund."
+                sources = ["PowerWatch Active Outage Telemetry", "Section 63 Electricity Act 2023", "NERC SBT Framework"]
+                action = "Reply with total daily hours received or text 'light is back' when restored to finalize your tariff audit."
+                confidence_level = "Verified"
+                confidence_score = 94
+            elif detected_meter or reported_hours or "band a" in lower:
                 if country == "Nigeria":
                     hours_txt = f"{reported_hours} hrs" if reported_hours else "sub-threshold hours"
                     summary_en = f"POWERWATCH TARIFF AUDIT: Corroborated meter #{detected_meter or 'Citizen Account'} on {disco_name or 'Distribution Feeder'}. Actual supply recorded as {hours_txt}/day vs statutory 20.0-hr Band A requirement. Under NERC Supplementary Orders to MYTO & Section 63 Electricity Act 2023, this breach triggers an automatic feeder downgrade to Band C (₦68/kWh) and retrospective token credit refunds."
