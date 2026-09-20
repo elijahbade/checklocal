@@ -14,8 +14,8 @@ class Settings(BaseModel):
     
     # AI Config (Google Gemini)
     GEMINI_API_KEY: str = os.getenv("GEMINI_API_KEY", "")
-    GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-2.0-flash")
-    GEMINI_FALLBACK_MODEL: str = "gemini-1.5-flash"
+    GEMINI_MODEL: str = os.getenv("GEMINI_MODEL", "gemini-3.6-flash")
+    GEMINI_FALLBACK_MODEL: str = os.getenv("GEMINI_FALLBACK_MODEL", "gemini-3.5-flash")
     
     # WhatsApp Bot Profile
     WHATSAPP_BOT_NAME: str = "PowerWatch by CheckLocal"
