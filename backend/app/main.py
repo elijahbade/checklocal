@@ -64,3 +64,24 @@ if frontend_dir.exists():
         if index_file.exists():
             return FileResponse(index_file)
         return {"message": "Frontend index.html not found"}
+
+    @app.get("/tos")
+    def serve_frontend_tos():
+        tos_file = frontend_dir / "tos.html"
+        if tos_file.exists():
+            return FileResponse(tos_file)
+        return {"message": "Terms of Service page not found"}
+
+    @app.get("/privacy-policy")
+    def serve_frontend_privacy_policy():
+        privacy_file = frontend_dir / "privacy-policy.html"
+        if privacy_file.exists():
+            return FileResponse(privacy_file)
+        return {"message": "Privacy Policy page not found"}
+
+    @app.get("/privacy")
+    def serve_frontend_privacy_alias():
+        privacy_file = frontend_dir / "privacy-policy.html"
+        if privacy_file.exists():
+            return FileResponse(privacy_file)
+        return {"message": "Privacy Policy page not found"}
