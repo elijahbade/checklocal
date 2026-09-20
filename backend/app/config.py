@@ -18,9 +18,9 @@ class Settings(BaseModel):
     GEMINI_FALLBACK_MODEL: str = "gemini-1.5-flash"
     
     # WhatsApp Bot Profile
-    WHATSAPP_BOT_NAME: str = "CheckLocal Verified Bot"
-    WHATSAPP_DISPLAY_PHONE: str = os.getenv("WHATSAPP_DISPLAY_PHONE", "+234 812 CHECK-99")
-    WHATSAPP_LINK: str = os.getenv("WHATSAPP_LINK", "https://wa.me/2348122432599?text=Hello%20CheckLocal,%20I%20want%20to%20verify%20a%20report")
+    WHATSAPP_BOT_NAME: str = "PowerWatch by CheckLocal"
+    WHATSAPP_DISPLAY_PHONE: str = os.getenv("WHATSAPP_DISPLAY_PHONE", "+1 (555) 138-5354")
+    WHATSAPP_LINK: str = os.getenv("WHATSAPP_LINK", "https://wa.me/15551385354?text=Hello%20PowerWatch,%20I%20want%20to%20log%20my%20meter%20for%20a%20tariff%20audit")
     
     # Twilio Integration
     TWILIO_ACCOUNT_SID: str = os.getenv("TWILIO_ACCOUNT_SID", "")

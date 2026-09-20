@@ -397,7 +397,7 @@ const CheckLocalApp = {
                                      `*Supply Logged:* ${data.actual_hours}h / ${data.promised_hours}h statutory requirement\n` +
                                      `*Statutory Precedent:* Section 63 Electricity Act 2023 & NERC MYTO Orders\n` +
                                      `*Overcharge Differential:* ${data.overbilling_differential}\n\n` +
-                                     `Join this collective tariff refund petition on PowerWatch: https://wa.me/2348122432599`;
+                                     `Join this collective tariff refund petition on PowerWatch: https://wa.me/15551385354`;
                     window.open(`https://wa.me/?text=${encodeURIComponent(shareTxt)}`, "_blank");
                 };
             }
@@ -474,8 +474,8 @@ const CheckLocalApp = {
                      `*${fact.title}*\n\n` +
                      `*Verified Supply:* ${fact.summary_en}\n\n` +
                      `*Action:* ${fact.action}\n\n` +
-                     `Log your meter & join the dispute docket on WhatsApp: +234 812 CHECK-99\n` +
-                     `Public Mirror: http://127.0.0.1:8000`;
+                     `Log your meter & join the dispute docket on WhatsApp: +1 (555) 138-5354\n` +
+                     `Public Mirror: https://powerwatch.up.railway.app`;
         const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
         window.open(url, '_blank');
     },
@@ -487,7 +487,7 @@ const CheckLocalApp = {
                      `*City Power Joburg:* Alexandra load reduction challenged under Pretoria High Court ruling.\n` +
                      `*Lagos Petrol:* ₦850 – ₦890/L benchmark at NNPC/Total retail stations.\n\n` +
                      `Log your electricity meter to join the collective tariff refund petition!\n` +
-                     `WhatsApp Hotline: +234 812 CHECK-99`;
+                     `WhatsApp Hotline: +1 (555) 138-5354`;
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(text).then(() => {
                 const orig = btnEl.innerHTML;
