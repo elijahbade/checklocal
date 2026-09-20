@@ -35,6 +35,25 @@ const WhatsAppSimulator = {
                 this.sendMessage(prompt);
             });
         });
+
+        // Check active AI / Heuristic engine immediately on page load
+        this.checkEngineStatus();
+    },
+
+    async checkEngineStatus() {
+        try {
+            const res = await fetch("/api/engine-status");
+            if (!res.ok) return;
+            const data = await res.json();
+            const statusEl = document.querySelector(".wa-status span");
+            if (statusEl && data.engine) {
+                const color = data.is_gemini ? "#38BDF8" : "#86EFAC";
+                statusEl.innerHTML = `Online • <strong style="color:${color};">${data.engine}</strong>`;
+            }
+            console.log(`⚡ [PowerWatch Initial Engine Check]: ${data.engine}`);
+        } catch (e) {
+            console.warn("Could not check engine status:", e);
+        }
     },
 
     getCurrentTime() {

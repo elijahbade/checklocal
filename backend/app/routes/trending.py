@@ -157,6 +157,22 @@ def get_benchmarks(country: Optional[str] = "Nigeria", db: Session = Depends(get
         for b in benchmarks
     ]
 
+from app.config import settings
+
+@router.get("/engine-status")
+def get_engine_status():
+    """
+    Returns whether Google Gemini AI or the Civic Heuristic Fallback Engine is active.
+    """
+    is_gemini = bool(ai_service.client)
+    engine_name = f"Google Gemini ({settings.GEMINI_MODEL})" if is_gemini else "Civic Heuristic Fallback Engine"
+    return {
+        "engine": engine_name,
+        "is_gemini": is_gemini,
+        "model": settings.GEMINI_MODEL if is_gemini else "heuristics",
+        "has_gemini_key": bool(settings.GEMINI_API_KEY)
+    }
+
 @router.post("/simulate-chat")
 async def simulate_whatsapp_chat(payload: ChatSimulationRequest, db: Session = Depends(get_db)):
     """
