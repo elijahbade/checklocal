@@ -108,12 +108,47 @@ class AIService:
         else:
             logger.info("No GEMINI_API_KEY provided. Using CheckLocal intelligent civic verification fallback engine.")
 
+    def _is_greeting(self, text: str) -> bool:
+        """Detects if message is a simple greeting, onboarding request, or help command."""
+        cleaned = re.sub(r'[^\w\s]', '', text.lower().strip())
+        greeting_words = {
+            "hi", "hello", "hey", "help", "start", "menu", "info", "test",
+            "good morning", "good afternoon", "good evening", "yo", "sup",
+            "how are you", "who are you", "what can you do", "kedu", "bawo",
+            "sannu", "hujambo", "sawubona", "morning", "afternoon", "evening"
+        }
+        if cleaned in greeting_words:
+            return True
+        # Check short greetings like "hi bot", "hello powerwatch"
+        words = cleaned.split()
+        if len(words) <= 3 and any(w in words for w in ["hi", "hello", "hey", "help", "menu"]):
+            if not any(w in cleaned for w in ["power", "light", "meter", "fuel", "petrol", "price", "garri", "rice", "outage", "band a"]):
+                return True
+        return False
+
     async def verify_report(self, text: str, user_id: str = "reporter", media_type: str = "text", location_hint: str = "") -> Dict[str, Any]:
         """
-        Processes a citizen report or rumor.
+        Processes a citizen report, rumor, or conversational greeting.
         Returns structured verification with dual English and Nigerian Pidgin summaries,
         confidence score, sources, and one clear action.
         """
+        # Fast-path for greetings & help requests
+        if self._is_greeting(text):
+            return {
+                "category": "greeting",
+                "is_greeting": True,
+                "country": "Nigeria",
+                "location": "Lagos, Nigeria",
+                "detected_language": "English",
+                "verified_summary_en": "Welcome to PowerWatch by CheckLocal! I am your civic electricity tariff and outage watchdog. You can log power outages, verify Band A tariffs, check local fuel/food prices, or debunk viral rumors.",
+                "verified_summary_pidgin": "Welcome to PowerWatch! Send your meter number and outage hours make we check if your DisCo dey overbill you on Band A rate.",
+                "confidence_level": "Verified",
+                "confidence_score": 100,
+                "sources": ["CheckLocal Civic Platform", "NERC Regulations", "Section 63 Electricity Act 2023"],
+                "next_action": "Send your meter number and outage details to log a tariff audit (e.g. 'Power out in Gwarinpa for 6 hours, meter #01283948572 on AEDC').",
+                "is_rumor_debunked": False
+            }
+
         # Try Gemini API if available
         if self.client:
             try:
@@ -138,11 +173,11 @@ The user sent this report via WhatsApp (type: {media_type}):
 Location hint if any: "{location_hint}"
 
 Analyze this report and return a strictly valid JSON object with the following keys:
-- "category": one of ["fuel_price", "food_staple", "power_status", "water_status", "rumor_claim", "other"]
+- "category": one of ["power_status", "fuel_price", "food_staple", "water_status", "rumor_claim", "greeting", "other"]
 - "country": "Nigeria", "Kenya", or "South Africa" (default to Nigeria if unclear)
 - "location": specific neighborhood/city/state extracted from report, or "Lagos, Nigeria" if not specified
 - "detected_language": detected language of the user message (one of: "English", "Pidgin", "Swahili", "Yoruba", "Hausa", "isiZulu")
-- "verified_summary_en": 2-3 sentences of clear, factual, objective summary in Plain English. State the prevailing facts, benchmark prices, or debunk if it's a false claim.
+- "verified_summary_en": 2-3 sentences of clear, factual, objective summary in Plain English. If greeting/help, welcome the user and explain how to report.
 - "verified_summary_pidgin": 2-3 sentences translating the exact same verified summary into natural, warm, everyday Nigerian Pidgin English.
 - "verified_summary_swahili": 2-3 sentences translating into natural Kiswahili (Swahili) for East Africa / Kenya.
 - "verified_summary_yoruba": 2-3 sentences translating into natural Yoruba.
@@ -383,6 +418,40 @@ Return ONLY raw JSON, no markdown code fence, no additional commentary.
         4. Light points system (display only)
         5. "Coming soon: Local Ambassador programme + other civic tools."
         """
+        # Dedicated friendly onboarding layout for greetings
+        if data.get("is_greeting") or data.get("category") == "greeting":
+            reply = f"""*PowerWatch by CheckLocal*
+Civic Electricity Tariff & Outage Watchdog
+(OSF × Andela Hackathon 2026 • "Information you can trust")
+
+Hello! I am your civic watchdog assistant for Nigeria & South Africa. I help you audit electricity tariffs, log power outages, check fuel/food benchmarks, and generate legal dispute dockets.
+
+*How to use me:*
+
+1. *Log Power Outage & Tariff Breach (Band A Audit)*
+   Send: _"Power out in Gwarinpa for 6 hours, meter #01283948572 on AEDC Band A"_
+   -> We verify your feeder supply against Section 63 Electricity Act 2023 and add your meter to the Collective Dispute Docket.
+
+2. *Check Retail Fuel & Petrol Prices*
+   Send: _"Current petrol price in Lagos"_ or _"Fuel price in Nairobi"_
+   -> We return verified retail benchmarks (NMDPRA / EPRA).
+
+3. *Check Market Food Prices*
+   Send: _"Price of garri in Mile 12"_ or _"Rice price in Bodija"_
+
+4. *Verify Circulating Rumors & Debunks*
+   Forward any viral WhatsApp audio or text claim to check its authenticity.
+
+────────────────
+*In Nigerian Pidgin:*
+_Welcome! Send your meter number and outage hours make we check if your DisCo dey overbill you on Band A rate._
+
+*Civic Trust Points:* +{points_earned} pts | *Rank:* {user_badge} ({user_points} pts)
+
+_PowerWatch Phase 2: Micro-IoT Ground-Truth Anchor (Coming Soon)._
+_Coming soon: Local Ambassador programme + other civic tools._"""
+            return reply
+
         is_power = data.get("category") == "power_status"
         brand_header = "*PowerWatch by CheckLocal*" if is_power else "*CheckLocal Civic Fact-Check*"
 
