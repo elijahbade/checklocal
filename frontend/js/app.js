@@ -539,30 +539,42 @@ const CheckLocalApp = {
 
     async syndicateToTwitter(factId, btnEl) {
         if (!btnEl) return;
+        const fact = this.facts.find(f => f.id === factId);
         const originalText = btnEl.innerHTML;
         btnEl.disabled = true;
-        btnEl.innerHTML = "<span>Posting...</span>";
+        btnEl.innerHTML = "<span>Sharing...</span>";
 
+        // 1. Open official X (Twitter) Web Intent in a new tab with pre-filled civic petition text
+        const tweetText = fact 
+            ? `POWERWATCH CIVIC AUDIT (${fact.location}): ${fact.title}\n\n${fact.summary_en}\n\nLog your meter & join the regulatory dispute docket on WhatsApp:\nhttps://powerwatch.up.railway.app`
+            : `PowerWatch by CheckLocal - Ground-Truth Electricity Tariff & Outage Watchdog: https://powerwatch.up.railway.app`;
+        
+        const twitterIntentUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
+        window.open(twitterIntentUrl, "_blank");
+
+        // 2. Broadcast to backend regulatory wire feed
         try {
             const res = await fetch(`/api/trending/${factId}/tweet`, { method: "POST" });
             const data = await res.json();
 
-            if (data.status === "syndicated" || data.status === "already_syndicated") {
-                btnEl.innerHTML = "<span>✓ Broadcasted</span>";
+            if (data.status === "success" || data.status === "syndicated" || data.status === "already_syndicated") {
+                btnEl.innerHTML = "<span>✓ Shared to X</span>";
                 btnEl.style.background = "#F4F4F5";
                 btnEl.style.color = "#09090B";
                 this.loadTweets();
             } else {
-                btnEl.innerHTML = "<span>Error</span>";
+                btnEl.innerHTML = "<span>✓ Shared to X</span>";
             }
         } catch (err) {
-            console.error("Failed to syndicate tweet:", err);
-            btnEl.innerHTML = "<span>Failed</span>";
+            console.warn("Backend syndication log warning:", err);
+            btnEl.innerHTML = "<span>✓ Shared to X</span>";
         } finally {
             setTimeout(() => {
                 btnEl.disabled = false;
                 btnEl.innerHTML = originalText;
-            }, 3000);
+                btnEl.style.background = "";
+                btnEl.style.color = "";
+            }, 3500);
         }
     },
 

@@ -9,6 +9,8 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110%2B-009688.svg)](https://fastapi.tiangolo.com)
 [![Google Gemini AI](https://img.shields.io/badge/AI-Google%20Gemini%203.7%20Flash-4285F4.svg)](https://ai.google.dev)
 [![AI Methodology](https://img.shields.io/badge/Methodology-Responsible%20AI%20Architecture-purple.svg)](AI_METHODOLOGY.md)
+[![Lead Architect: Elijah Bade](https://img.shields.io/badge/Lead%20Architect-Elijah%20Bade-0077B5.svg?logo=linkedin)](https://linkedin.com/in/elijahbade)
+[![GitHub: elijahbade](https://img.shields.io/badge/GitHub-elijahbade-181717.svg?logo=github)](https://github.com/elijahbade)
 
 > **"Ground-truth power accountability — from citizen WhatsApp outage logs to subpoena-grade regulatory complaint dockets."**
 > 
@@ -192,6 +194,14 @@ Marked as *"Coming Soon"* for the hackathon MVP:
 - **Civic Trust Token / Airtime Vouchers**: Enabling active reporters to redeem verified civic trust points for mobile talk time and data bundles.
 - **Verified Merchant Badges**: Providing physical QR stickers for market vendors selling at fair regulatory benchmark prices.
 - **Expanded Indigenous Languages**: Expanding translations beyond Nigerian Pidgin to include **Yoruba, Hausa, Igbo, Swahili, and isiZulu**.
+
+---
+
+## 👨‍💻 Lead Architect & Creator
+**Elijah Bade**
+- 💼 **LinkedIn**: [linkedin.com/in/elijahbade](https://linkedin.com/in/elijahbade)
+- 🐙 **GitHub**: [github.com/elijahbade](https://github.com/elijahbade)
+- 🏛️ **Hackathon Entry**: OSF × Andela Hackathon 2026 ("Information you can trust")
 
 ---
 
