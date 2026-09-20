@@ -135,6 +135,7 @@ class AIService:
         # Fast-path for greetings & help requests
         if self._is_greeting(text):
             return {
+                "engine": "Greeting Fast-Path",
                 "category": "greeting",
                 "is_greeting": True,
                 "country": "Nigeria",
@@ -154,12 +155,15 @@ class AIService:
             try:
                 ai_result = await self._verify_with_gemini(text, media_type, location_hint)
                 if ai_result:
+                    logger.info(f"Report verified via: {ai_result.get('engine', 'Google Gemini')}")
                     return ai_result
             except Exception as e:
                 logger.error(f"Error calling Gemini API: {e}. Reverting to civic heuristic engine.")
 
         # Heuristic Rule-Based Engine
-        return self._verify_with_heuristics(text, location_hint)
+        heuristic_result = self._verify_with_heuristics(text, location_hint)
+        logger.info(f"Report verified via: {heuristic_result.get('engine', 'Civic Heuristics')}")
+        return heuristic_result
 
     async def _verify_with_gemini(self, text: str, media_type: str, location_hint: str) -> Dict[str, Any]:
         from google import genai
@@ -210,6 +214,7 @@ Return ONLY raw JSON, no markdown code fence, no additional commentary.
                 raw_text = re.sub(r"\n?```$", "", raw_text)
             
             data = json.loads(raw_text)
+            data["engine"] = f"Google Gemini ({model_name})"
             return data
         except Exception as err:
             logger.warning(f"Failed to generate structured response with {model_name}: {err}")
@@ -224,7 +229,9 @@ Return ONLY raw JSON, no markdown code fence, no additional commentary.
                     if raw_text.startswith("```"):
                         raw_text = re.sub(r"^```(?:json)?\n?", "", raw_text)
                         raw_text = re.sub(r"\n?```$", "", raw_text)
-                    return json.loads(raw_text)
+                    fb_data = json.loads(raw_text)
+                    fb_data["engine"] = f"Google Gemini Fallback ({settings.GEMINI_FALLBACK_MODEL})"
+                    return fb_data
                 except Exception as fb_err:
                     logger.warning(f"Fallback model also failed: {fb_err}")
             return None
@@ -407,6 +414,7 @@ Return ONLY raw JSON, no markdown code fence, no additional commentary.
             summary_zulu = "Isimo Sikagesi: Akukho ukucinywa kukagesi kuzwelonke namuhla; amapayipi kagesi ayalungiswa."
 
         return {
+            "engine": "Civic Heuristic Fallback Engine",
             "category": category,
             "country": country,
             "location": location,

@@ -194,6 +194,7 @@ async def simulate_whatsapp_chat(payload: ChatSimulationRequest, db: Session = D
 
     return {
         "reply": formatted_reply,
+        "engine": verification.get("engine", "Civic Engine"),
         "verification_data": verification,
         "points_earned": points_earned,
         "total_points": total_points,

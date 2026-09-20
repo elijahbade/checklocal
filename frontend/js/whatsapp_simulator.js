@@ -131,6 +131,16 @@ const WhatsAppSimulator = {
                     this.userBadgeEl.textContent = data.user_badge;
                 }
 
+                // Display active AI / Heuristic engine in simulator header & console
+                if (data.engine) {
+                    console.log(`⚡ [PowerWatch Verification Engine]: ${data.engine}`);
+                    const statusEl = document.querySelector(".wa-status span");
+                    if (statusEl) {
+                        const isGemini = data.engine.toLowerCase().includes("gemini");
+                        statusEl.innerHTML = `Online • <strong style="color:${isGemini ? '#38BDF8' : '#86EFAC'};">${data.engine}</strong>`;
+                    }
+                }
+
                 // If this report generated or updated trending cards, trigger a feed refresh
                 if (window.CheckLocalApp && typeof window.CheckLocalApp.loadTrendingFacts === "function") {
                     window.CheckLocalApp.loadTrendingFacts();
