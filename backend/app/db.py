@@ -26,7 +26,8 @@ def init_db():
             ("disco_name", "VARCHAR(100)"),
             ("feeder_name", "VARCHAR(150)"),
             ("tariff_band", "VARCHAR(50)"),
-            ("hours_supplied", "VARCHAR(50)")
+            ("hours_supplied", "VARCHAR(50)"),
+            ("estate_association", "VARCHAR(150)")
         ]:
             if col not in cols_reports:
                 try:

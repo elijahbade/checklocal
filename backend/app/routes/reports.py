@@ -50,7 +50,8 @@ async def submit_report(payload: ReportCreateRequest, db: Session = Depends(get_
         points_awarded=points_earned,
         meter_number=verification.get("meter_number"),
         disco_name=verification.get("disco_name"),
-        hours_supplied=str(verification.get("reported_hours")) if verification.get("reported_hours") else None
+        hours_supplied=str(verification.get("reported_hours")) if verification.get("reported_hours") else None,
+        estate_association=payload.estate_association
     )
     db.add(report)
     

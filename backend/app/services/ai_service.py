@@ -384,35 +384,36 @@ Return ONLY raw JSON, no markdown code fence, no additional commentary.
         5. "Coming soon: Local Ambassador programme + other civic tools."
         """
         is_power = data.get("category") == "power_status"
-        brand_header = "*PowerWatch by CheckLocal* ⚡" if is_power else "*CheckLocal Civic Fact-Check* " + {
-            "fuel_price": "⛽",
-            "food_staple": "🌾",
-            "water_status": "💧",
-            "rumor_claim": "🔍",
-            "other": "📋"
-        }.get(data.get("category", "other"), "🔍")
+        brand_header = "*PowerWatch by CheckLocal*" if is_power else "*CheckLocal Civic Fact-Check*"
 
         sources_formatted = ", ".join(data.get("sources", ["Citizen Reports", "Public Monitors"]))
         confidence = data.get("confidence_level", "High")
-        confidence_badge = "🟢 VERIFIED" if confidence in ["Verified", "High"] else "🟡 COMMUNITY CONSENSUS"
+        confidence_badge = "[VERIFIED]" if confidence in ["Verified", "High"] else "[COMMUNITY CONSENSUS]"
 
         detected_lang = data.get("detected_language", "English")
 
         # Dynamic Language Section
         local_lang_section = ""
         if detected_lang == "Swahili" and data.get("verified_summary_swahili"):
-            local_lang_section = f"\n*In Kiswahili (Swahili 🇰🇪):*\n{data.get('verified_summary_swahili')}\n"
+            local_lang_section = f"\n*In Kiswahili (Swahili):*\n{data.get('verified_summary_swahili')}\n"
         elif detected_lang == "Yoruba" and data.get("verified_summary_yoruba"):
-            local_lang_section = f"\n*In Yoruba (🇳🇬):*\n{data.get('verified_summary_yoruba')}\n"
+            local_lang_section = f"\n*In Yoruba:*\n{data.get('verified_summary_yoruba')}\n"
         elif detected_lang == "Hausa" and data.get("verified_summary_hausa"):
-            local_lang_section = f"\n*In Hausa (🇳🇬):*\n{data.get('verified_summary_hausa')}\n"
+            local_lang_section = f"\n*In Hausa:*\n{data.get('verified_summary_hausa')}\n"
         elif detected_lang == "isiZulu" and data.get("verified_summary_zulu"):
-            local_lang_section = f"\n*In isiZulu (🇿🇦):*\n{data.get('verified_summary_zulu')}\n"
+            local_lang_section = f"\n*In isiZulu:*\n{data.get('verified_summary_zulu')}\n"
         else:
             # Default to Nigerian Pidgin
             local_lang_section = f"\n*In Nigerian Pidgin:*\n{data.get('verified_summary_pidgin', '')}\n"
 
-        meter_line = f"⚡ *Meter Corroborated:* #{data.get('meter_number')}\n" if data.get("meter_number") else ""
+        meter_line = f"*Meter Corroborated:* #{data.get('meter_number')}\n" if data.get("meter_number") else ""
+
+        community_action_block = ""
+        if is_power and (data.get("meter_number") or "band a" in str(data.get("verified_summary_en", "")).lower()):
+            community_action_block = (
+                "\n*Community Action (CDA / Estate Exco):*\n"
+                "Forward this to your Estate / Street WhatsApp group so neighbors can append their meters before your CDA files Docket #PW-NERC-2026-042!\n"
+            )
 
         reply = f"""{brand_header}
 {confidence_badge} ({data.get('confidence_score', 85)}% confidence)
@@ -420,15 +421,12 @@ Return ONLY raw JSON, no markdown code fence, no additional commentary.
 *In English:*
 {data.get('verified_summary_en', '')}
 {local_lang_section}
-*Sources:*
-📌 {sources_formatted}
+*Sources:* {sources_formatted}
 
-*Next Action For You:*
-👉 {data.get('next_action', 'Share this verified fact with your community group.')}
-
+*Next Action:* {data.get('next_action', 'Share this verified fact with your community group.')}
+{community_action_block}
 ────────────────
-✨ *Civic Trust Points:* +{points_earned} pts earned!
-🎖️ *Your Rank:* {user_badge} (Total: {user_points} pts)
+*Civic Trust Points:* +{points_earned} pts | *Rank:* {user_badge} ({user_points} pts)
 
 _PowerWatch Phase 2: Micro-IoT Ground-Truth Anchor (Coming Soon)._
 _Coming soon: Local Ambassador programme + other civic tools._"""

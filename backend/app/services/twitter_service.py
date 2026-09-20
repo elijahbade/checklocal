@@ -63,17 +63,17 @@ class TwitterService:
         country_tag = "#Nigeria" if country == "Nigeria" else ("#Kenya" if country == "Kenya" else "#SouthAfrica")
 
         if category == "rumor_claim":
-            header = "🚨 FACT CHECK / DEBUNK"
+            header = "FACT CHECK / DEBUNK"
         elif category == "fuel_price":
-            header = f"⛽ FUEL BENCHMARK • {location}"
+            header = f"FUEL BENCHMARK • {location}"
         elif category == "food_staple":
-            header = f"🌾 FOOD COMMODITY UPDATE • {location}"
+            header = f"FOOD COMMODITY UPDATE • {location}"
         elif category == "power_status":
-            header = f"⚡ UTILITY ALERT • {location}"
+            header = f"UTILITY REGULATORY ALERT • {location}"
         else:
-            header = f"🔍 CIVIC VERIFICATION • {location}"
+            header = f"CIVIC VERIFICATION • {location}"
 
-        tweet = f"{header}\n\n{summary[:160]}...\n\n👉 Action: {action[:70]}\n\nVerified via CheckLocal WhatsApp network.\n#CheckLocal {country_tag} #CivicTrust"
+        tweet = f"{header}\n\n{summary[:160]}...\n\nAction: {action[:70]}\n\nVerified via CheckLocal WhatsApp network.\n#CheckLocal {country_tag} #CivicTrust"
         return tweet
 
     def publish_tweet(self, fact: Dict[str, Any]) -> Dict[str, Any]:

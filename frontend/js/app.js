@@ -145,10 +145,9 @@ const CheckLocalApp = {
 
         if (!facts || facts.length === 0) {
             container.innerHTML = `
-                <div style="background:white;border-radius:12px;padding:3rem 1.5rem;text-align:center;border:1px dashed #CBD5E1;">
-                    <div style="font-size:2rem;margin-bottom:0.5rem;">⚡</div>
-                    <h3 style="font-size:1.1rem;font-weight:700;color:#1E293B;margin-bottom:0.4rem;">No records found in this category</h3>
-                    <p style="color:#64748B;font-size:0.875rem;margin-bottom:1.25rem;">Be the first in your community to log an outage, meter, or price report!</p>
+                <div style="background:white;border-radius:4px;padding:3rem 1.5rem;text-align:center;border:1px solid #CBD5E1;">
+                    <h3 style="font-size:1.05rem;font-weight:700;color:#1E293B;margin-bottom:0.4rem;">No records found in this category</h3>
+                    <p style="color:#64748B;font-size:0.85rem;margin-bottom:1.25rem;">Be the first in your community to log an outage, meter, or price report.</p>
                     <button class="btn btn-primary" onclick="document.getElementById('openReportModalBtn').click()">Log Outage / Meter</button>
                 </div>
             `;
@@ -156,7 +155,7 @@ const CheckLocalApp = {
         }
 
         const categoryNames = {
-            power_status: "⚡ Feeder Audit (PowerWatch)",
+            power_status: "Feeder Audit (PowerWatch)",
             fuel_price: "Fuel & Petrol",
             food_staple: "Food Staple",
             water_status: "Water Utility",
@@ -164,28 +163,28 @@ const CheckLocalApp = {
         };
 
         const countryFlags = {
-            "Nigeria": "🇳🇬",
-            "Kenya": "🇰🇪",
-            "South Africa": "🇿🇦"
+            "Nigeria": "[NG]",
+            "Kenya": "[KE]",
+            "South Africa": "[ZA]"
         };
 
         container.innerHTML = facts.map(fact => {
-            const flag = countryFlags[fact.country] || "🌐";
+            const flag = countryFlags[fact.country] || "[REGIONAL]";
             const catClass = `cat-${fact.category}`;
             const catName = categoryNames[fact.category] || fact.category.replace('_', ' ');
             const highlight = CheckLocalApp.getFactHighlight(fact);
 
             let confBadgeClass = "conf-high";
-            let confIcon = "🟢 Verified";
+            let confIcon = "Verified Quorum";
             if (fact.confidence_level === "Verified") {
                 confBadgeClass = "conf-verified";
-                confIcon = "✓ Verified Quorum";
+                confIcon = "Verified Quorum";
             } else if (fact.confidence_level === "High") {
                 confBadgeClass = "conf-high";
-                confIcon = "🛡️ Statutory Precedent";
+                confIcon = "Statutory Precedent";
             } else {
                 confBadgeClass = "conf-consensus";
-                confIcon = "👥 Corroborated";
+                confIcon = "Corroborated";
             }
 
             const isPower = fact.category === "power_status";
@@ -211,18 +210,25 @@ const CheckLocalApp = {
                 </div>
             ` : "";
 
+            const cdaBoxHtml = isPower ? `
+                <div class="cda-action-box">
+                    <div class="cda-action-header">COMMUNITY LEAD & CDA ACTION</div>
+                    <div><strong>${fact.report_count} resident meters corroborated.</strong> Feeder breach qualifies for collective NERC downward reclassification to Band C and retrospective token refunds. Community leads can download the petition below for estate-wide submission.</div>
+                </div>
+            ` : "";
+
             const docketBtnHtml = isPower ? `
                 <button class="btn-docket-action" onclick="CheckLocalApp.openDocketModal(${fact.id})" title="Generate Official NERC/NERSA Complaint Petition">
-                    <span>📜 Legal Dispute Docket</span>
+                    <span>Legal Dispute Docket</span>
                 </button>
             ` : "";
 
             return `
-                <article class="fact-card border-${fact.category}" id="fact-card-${fact.id}">
+                <article class="fact-card" id="fact-card-${fact.id}">
                     <div class="card-meta-top">
                         <div class="card-tags">
                             <span class="tag-category ${catClass}">${catName}</span>
-                            <span class="tag-location">${flag} ${fact.location}</span>
+                            <span class="tag-location">${fact.location}</span>
                         </div>
                         <span class="tag-confidence ${confBadgeClass}">${confIcon}</span>
                     </div>
@@ -230,21 +236,22 @@ const CheckLocalApp = {
                     <h3 class="card-title">${fact.title}</h3>
 
                     <!-- High-Visibility Price / Status Metric Callout -->
-                    <div class="fact-metric-callout callout-${highlight.type}">
+                    <div class="fact-metric-callout">
                         <span class="callout-label">${highlight.label}</span>
                         <span class="callout-value">${highlight.value}</span>
                     </div>
 
                     ${feederBoxHtml}
+                    ${cdaBoxHtml}
 
                     <!-- Multilingual Switcher Chips -->
                     <div class="lang-toggle-bar" style="overflow-x:auto; padding-bottom:4px;">
                         <button class="lang-chip active" onclick="CheckLocalApp.switchLang(${fact.id}, 'en', this)">English</button>
-                        <button class="lang-chip" onclick="CheckLocalApp.switchLang(${fact.id}, 'pidgin', this)">🇳🇬 Pidgin</button>
-                        ${fact.summary_swahili ? `<button class="lang-chip" onclick="CheckLocalApp.switchLang(${fact.id}, 'swahili', this)">🇰🇪 Kiswahili</button>` : ''}
-                        ${fact.summary_yoruba ? `<button class="lang-chip" onclick="CheckLocalApp.switchLang(${fact.id}, 'yoruba', this)">🇳🇬 Yoruba</button>` : ''}
-                        ${fact.summary_hausa ? `<button class="lang-chip" onclick="CheckLocalApp.switchLang(${fact.id}, 'hausa', this)">🇳🇬 Hausa</button>` : ''}
-                        ${fact.summary_zulu ? `<button class="lang-chip" onclick="CheckLocalApp.switchLang(${fact.id}, 'zulu', this)">🇿🇦 isiZulu</button>` : ''}
+                        <button class="lang-chip" onclick="CheckLocalApp.switchLang(${fact.id}, 'pidgin', this)">Pidgin</button>
+                        ${fact.summary_swahili ? `<button class="lang-chip" onclick="CheckLocalApp.switchLang(${fact.id}, 'swahili', this)">Kiswahili</button>` : ''}
+                        ${fact.summary_yoruba ? `<button class="lang-chip" onclick="CheckLocalApp.switchLang(${fact.id}, 'yoruba', this)">Yoruba</button>` : ''}
+                        ${fact.summary_hausa ? `<button class="lang-chip" onclick="CheckLocalApp.switchLang(${fact.id}, 'hausa', this)">Hausa</button>` : ''}
+                        ${fact.summary_zulu ? `<button class="lang-chip" onclick="CheckLocalApp.switchLang(${fact.id}, 'zulu', this)">isiZulu</button>` : ''}
                     </div>
 
                     <!-- Language Summary Boxes -->
@@ -254,32 +261,29 @@ const CheckLocalApp = {
                     <div class="summary-block pidgin-box" id="summary-pidgin-${fact.id}" style="display: none;">
                         ${fact.summary_pidgin || fact.summary_en}
                     </div>
-                    <div class="summary-block" id="summary-swahili-${fact.id}" style="display: none; border-left-color: #0284C7; background: #F0F9FF;">
+                    <div class="summary-block" id="summary-swahili-${fact.id}" style="display: none;">
                         ${fact.summary_swahili || fact.summary_en}
                     </div>
-                    <div class="summary-block" id="summary-yoruba-${fact.id}" style="display: none; border-left-color: #7C3AED; background: #F5F3FF;">
+                    <div class="summary-block" id="summary-yoruba-${fact.id}" style="display: none;">
                         ${fact.summary_yoruba || fact.summary_en}
                     </div>
-                    <div class="summary-block" id="summary-hausa-${fact.id}" style="display: none; border-left-color: #D97706; background: #FFFBEB;">
+                    <div class="summary-block" id="summary-hausa-${fact.id}" style="display: none;">
                         ${fact.summary_hausa || fact.summary_en}
                     </div>
-                    <div class="summary-block" id="summary-zulu-${fact.id}" style="display: none; border-left-color: #059669; background: #ECFDF5;">
+                    <div class="summary-block" id="summary-zulu-${fact.id}" style="display: none;">
                         ${fact.summary_zulu || fact.summary_en}
                     </div>
 
                     <div class="sources-row">
-                        <span class="sources-icon">📌</span>
                         <span><strong>Sources:</strong> ${fact.sources}</span>
                     </div>
 
                     <div class="card-civic-strip">
                         <div class="action-callout">
-                            <span class="action-icon">👉</span>
                             <div><strong>Next Action:</strong> ${fact.action}</div>
                         </div>
                         ${fact.escalation_target ? `
                         <div class="escalation-badge">
-                            <span>🏛️</span>
                             <span><strong>Regulatory Track:</strong> ${fact.escalation_target}</span>
                         </div>` : ''}
                     </div>
@@ -290,14 +294,14 @@ const CheckLocalApp = {
                             <span style="font-size:0.75rem; color:#64748B;">${fact.report_count} meters</span>
                             ${docketBtnHtml}
                             <button class="btn-share-wa" onclick="CheckLocalApp.shareToWhatsApp(${fact.id})" title="Share to WhatsApp Groups & Status">
-                                <span>📲 WhatsApp</span>
+                                <span>WhatsApp</span>
                             </button>
                             <button class="btn-card-action" onclick="CheckLocalApp.syndicateToTwitter(${fact.id}, this)" title="Syndicate verified fact to X">
-                                <span>𝕏 Post</span>
+                                <span>Share to X</span>
                             </button>
                             <button class="btn-card-action" onclick="CheckLocalApp.upvoteFact(${fact.id}, this)">
-                                <span>👍</span>
-                                <span class="upvote-count" style="font-weight:700;">${fact.upvotes}</span>
+                                <span>Upvote</span>
+                                <span class="upvote-count" style="font-weight:700; margin-left:2px;">${fact.upvotes}</span>
                             </button>
                         </div>
                     </div>
@@ -311,7 +315,7 @@ const CheckLocalApp = {
             if (fact.actual_hours_avg && fact.promised_hours) {
                 return {
                     label: "FEEDER SUPPLY DEFICIT AUDIT",
-                    value: `⚡ ${fact.actual_hours_avg}h / ${fact.promised_hours}h Statutory Min (${fact.overbilling_differential || 'Under-Delivery'})`,
+                    value: `${fact.actual_hours_avg}h / ${fact.promised_hours}h Statutory Min (${fact.overbilling_differential || 'Under-Delivery'})`,
                     type: "power"
                 };
             }
@@ -351,7 +355,6 @@ const CheckLocalApp = {
         if (!modal || !viewer) return;
 
         viewer.innerHTML = `<div style="text-align:center;padding:3rem 1rem;color:#71717A;">
-            <div style="font-size:1.75rem;margin-bottom:0.5rem;">⚖️</div>
             <strong>Compiling Subpoena-Grade Regulatory Dispute Docket...</strong><br>
             <span style="font-size:0.8rem;">Cross-referencing verified meters against Section 63 Electricity Act 2023 telemetry standards.</span>
         </div>`;
@@ -384,7 +387,7 @@ const CheckLocalApp = {
 
             if (shareWaBtn) {
                 shareWaBtn.onclick = () => {
-                    const shareTxt = `⚖️ *POWERWATCH REGULATORY PETITION GENERATED*\n` +
+                    const shareTxt = `*POWERWATCH REGULATORY PETITION GENERATED*\n` +
                                      `*Docket Reference:* ${data.docket_reference}\n` +
                                      `*Feeder:* ${data.feeder_name} (${data.location})\n` +
                                      `*Supply Logged:* ${data.actual_hours}h / ${data.promised_hours}h statutory requirement\n` +
@@ -463,22 +466,22 @@ const CheckLocalApp = {
     shareToWhatsApp(factId) {
         const fact = this.facts.find(f => f.id === factId);
         if (!fact) return;
-        const text = `⚡ *POWERWATCH CIVIC AUDIT* (${fact.location})\n` +
-                     `📌 *${fact.title}*\n\n` +
-                     `✅ *Verified Supply:* ${fact.summary_en}\n\n` +
-                     `👉 *Action:* ${fact.action}\n\n` +
-                     `💬 Log your meter & join the dispute docket on WhatsApp: +234 812 CHECK-99\n` +
-                     `🌐 Public Mirror: http://127.0.0.1:8000`;
+        const text = `*POWERWATCH CIVIC AUDIT* (${fact.location})\n` +
+                     `*${fact.title}*\n\n` +
+                     `*Verified Supply:* ${fact.summary_en}\n\n` +
+                     `*Action:* ${fact.action}\n\n` +
+                     `Log your meter & join the dispute docket on WhatsApp: +234 812 CHECK-99\n` +
+                     `Public Mirror: http://127.0.0.1:8000`;
         const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
         window.open(url, '_blank');
     },
 
     copyMorningDigest(btnEl) {
-        const text = `⚡ *POWERWATCH DAILY CIVIC DISPATCH • ${new Date().toLocaleDateString()}*\n\n` +
-                     `⚡ *Magodo Phase 2 (IKEDC):* 6.8h avg vs 20h Band A (13.2h deficit). Dispute Docket #PW-NERC-2026-IKEDC-042 active.\n` +
-                     `⚡ *Gwarinpa (AEDC):* 5.2h avg vs 20h Band A. NERC ₦200M fine precedent cited. Docket #PW-NERC-2026-AEDC-019.\n` +
-                     `🇿🇦 *City Power Joburg:* Alexandra load reduction challenged under Pretoria High Court ruling.\n` +
-                     `⛽ *Lagos Petrol:* ₦850 – ₦890/L benchmark at NNPC/Total retail stations.\n\n` +
+        const text = `*POWERWATCH DAILY CIVIC DISPATCH • ${new Date().toLocaleDateString()}*\n\n` +
+                     `*Magodo Phase 2 (IKEDC):* 6.8h avg vs 20h Band A (13.2h deficit). Dispute Docket #PW-NERC-2026-IKEDC-042 active.\n` +
+                     `*Gwarinpa (AEDC):* 5.2h avg vs 20h Band A. NERC ₦200M fine precedent cited. Docket #PW-NERC-2026-AEDC-019.\n` +
+                     `*City Power Joburg:* Alexandra load reduction challenged under Pretoria High Court ruling.\n` +
+                     `*Lagos Petrol:* ₦850 – ₦890/L benchmark at NNPC/Total retail stations.\n\n` +
                      `Log your electricity meter to join the collective tariff refund petition!\n` +
                      `WhatsApp Hotline: +234 812 CHECK-99`;
         if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -509,7 +512,7 @@ const CheckLocalApp = {
             if (!tweets || tweets.length === 0) {
                 container.innerHTML = `
                     <div style="font-size:0.8rem; color:#71717A; text-align:center; padding:1rem 0;">
-                        No syndicated regulatory tweets yet. Click "𝕏 Post" on any feeder card to broadcast!
+                        No syndicated regulatory updates yet.
                     </div>
                 `;
                 return;
@@ -579,8 +582,8 @@ const CheckLocalApp = {
             const data = await res.json();
             const countEl = btnEl.querySelector(".upvote-count");
             if (countEl) countEl.textContent = data.upvotes;
-            btnEl.style.borderColor = "#10B981";
-            btnEl.style.color = "#047857";
+            btnEl.style.borderColor = "#0F172A";
+            btnEl.style.color = "#0F172A";
         } catch (err) {
             console.error("Failed to upvote:", err);
         }
@@ -591,6 +594,7 @@ const CheckLocalApp = {
         const location = document.getElementById("formLocation").value;
         const category = document.getElementById("formCategory").value;
         const content = document.getElementById("formContent").value;
+        const estate = document.getElementById("formEstate") ? document.getElementById("formEstate").value.trim() : "";
         const submitBtn = document.getElementById("formSubmitBtn");
         const previewBox = document.getElementById("verifyPreviewBox");
 
@@ -611,6 +615,7 @@ const CheckLocalApp = {
                     location,
                     category,
                     content,
+                    estate_association: estate,
                     source: "web"
                 })
             });
@@ -621,13 +626,13 @@ const CheckLocalApp = {
                 previewBox.style.display = "block";
                 previewBox.innerHTML = `
                     <div style="font-weight:700;color:#047857;margin-bottom:6px;display:flex;align-items:center;gap:6px;">
-                        <span>✓ Outage Logged & Appended to Feeder Audit!</span>
-                        <span style="font-size:0.8rem;background:#A7F3D0;padding:2px 8px;border-radius:99px;color:#065F46;">+${data.points_awarded} Points Earned</span>
+                        <span>Outage Logged & Appended to Feeder Audit</span>
+                        <span style="font-size:0.75rem;background:#E2E8F0;padding:2px 7px;border-radius:4px;color:#0F172A;">+${data.points_awarded} Points Earned</span>
                     </div>
-                    <div style="font-size:0.875rem;color:#1E293B;margin-bottom:8px;">
+                    <div style="font-size:0.85rem;color:#1E293B;margin-bottom:6px;">
                         <strong>Audit Verdict:</strong> ${data.verified_summary_en}
                     </div>
-                    <div style="font-size:0.85rem;color:#92400E;background:#FEF3C7;padding:6px 10px;border-radius:6px;margin-bottom:8px;">
+                    <div style="font-size:0.825rem;color:#475569;background:#F1F5F9;padding:6px 10px;border-radius:4px;margin-bottom:6px;">
                         <strong>Pidgin Summary:</strong> ${data.verified_summary_pidgin}
                     </div>
                     <div style="font-size:0.8rem;color:#047857;">

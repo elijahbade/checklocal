@@ -59,9 +59,9 @@ const WhatsAppSimulator = {
 
         let mediaHtml = "";
         if (mediaType === "voice_note") {
-            mediaHtml = `<div style="display:flex;align-items:center;gap:6px;background:rgba(0,0,0,0.04);padding:4px 8px;border-radius:6px;margin-bottom:4px;font-size:0.75rem;color:#047857;">🎤 <em>Voice Note Transcribed</em></div>`;
+            mediaHtml = `<div style="display:flex;align-items:center;gap:6px;background:rgba(0,0,0,0.04);padding:4px 8px;border-radius:4px;margin-bottom:4px;font-size:0.75rem;color:#047857;font-family:var(--font-mono);font-weight:700;">[VOICE NOTE TRANSCRIBED]</div>`;
         } else if (mediaType === "screenshot") {
-            mediaHtml = `<div style="display:flex;align-items:center;gap:6px;background:rgba(0,0,0,0.04);padding:4px 8px;border-radius:6px;margin-bottom:4px;font-size:0.75rem;color:#0369A1;">📸 <em>Screenshot Forward Analyzed</em></div>`;
+            mediaHtml = `<div style="display:flex;align-items:center;gap:6px;background:rgba(0,0,0,0.04);padding:4px 8px;border-radius:4px;margin-bottom:4px;font-size:0.75rem;color:#0369A1;font-family:var(--font-mono);font-weight:700;">[SCREENSHOT FORWARD ANALYZED]</div>`;
         }
 
         bubble.innerHTML = `
@@ -142,7 +142,7 @@ const WhatsAppSimulator = {
         } catch (err) {
             console.error("Error in simulator:", err);
             this.showTyping(false);
-            this.appendMessage("⚠️ Connection error. Please verify the backend server is active.", false);
+            this.appendMessage("Connection error. Please verify the backend server is active.", false);
             this.isTyping = false;
         }
     }

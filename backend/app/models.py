@@ -40,6 +40,7 @@ class ReportModel(Base):
     feeder_name = Column(String(150), nullable=True)
     tariff_band = Column(String(50), nullable=True)
     hours_supplied = Column(String(50), nullable=True)
+    estate_association = Column(String(150), nullable=True)
     
     created_at = Column(DateTime, default=datetime.utcnow)
 
@@ -109,6 +110,7 @@ class ReportCreateRequest(BaseModel):
     content: str
     media_type: Optional[str] = "text"
     source: Optional[str] = "web"
+    estate_association: Optional[str] = None
 
 class VerifyResponse(BaseModel):
     category: str
