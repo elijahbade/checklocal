@@ -217,6 +217,19 @@ const CheckLocalApp = {
                 </div>
             ` : "";
 
+            const quorumStripHtml = isPower ? `
+                <div class="quorum-indicator-strip">
+                    <div class="quorum-strip-left">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#16A34A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        <span class="quorum-strip-title">Community Quorum Verified</span>
+                    </div>
+                    <span class="quorum-strip-pill">✓ ${fact.report_count} / 10+ Meters</span>
+                    <div class="quorum-strip-desc">
+                        <strong>Corroborated by ${fact.report_count} independent household meters</strong> on this feeder node (10+ required to initiate formal regulatory dispute).
+                    </div>
+                </div>
+            ` : "";
+
             const docketBtnHtml = isPower ? `
                 <button class="btn-docket-action" onclick="CheckLocalApp.openDocketModal(${fact.id})" title="Generate Official NERC/NERSA Complaint Petition">
                     <svg class="docket-svg-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
@@ -242,6 +255,7 @@ const CheckLocalApp = {
                         <span class="callout-value">${highlight.value}</span>
                     </div>
 
+                    ${quorumStripHtml}
                     ${feederBoxHtml}
                     ${cdaBoxHtml}
 
@@ -416,7 +430,7 @@ const CheckLocalApp = {
             // Headers
             .replace(/^# (.*$)/gim, '<h1>$1</h1>')
             .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-            .replace(/^## (.*$)/gim, '<h2>$2</h2>')
+            .replace(/^## (.*$)/gim, '<h2>$1</h2>')
             // Bold & Italics
             .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
             .replace(/\*(.*?)\*/gim, '<em>$1</em>')

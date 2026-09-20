@@ -9,7 +9,7 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110%2B-009688.svg)](https://fastapi.tiangolo.com)
 [![Google Gemini AI](https://img.shields.io/badge/AI-Google%20Gemini%203.7%20Flash-4285F4.svg)](https://ai.google.dev)
 [![AI Methodology](https://img.shields.io/badge/Methodology-Responsible%20AI%20Architecture-purple.svg)](AI_METHODOLOGY.md)
-[![Lead Architect: Elijah Bade](https://img.shields.io/badge/Lead%20Architect-Elijah%20Bade-0077B5.svg?logo=linkedin)](https://linkedin.com/in/elijahbade)
+[![Creator & Lead Developer: Elijah Ajibade](https://img.shields.io/badge/Creator%20%26%20Lead%20Developer-Elijah%20Ajibade-0077B5.svg?logo=linkedin)](https://linkedin.com/in/elijahbade)
 [![GitHub: elijahbade](https://img.shields.io/badge/GitHub-elijahbade-181717.svg?logo=github)](https://github.com/elijahbade)
 
 > **"Ground-truth power accountability — from citizen WhatsApp outage logs to subpoena-grade regulatory complaint dockets."**
@@ -197,8 +197,8 @@ Marked as *"Coming Soon"* for the hackathon MVP:
 
 ---
 
-## 👨‍💻 Lead Architect & Creator
-**Elijah Bade**
+## 👨‍💻 Creator & Lead Developer
+**Elijah Ajibade**
 - 💼 **LinkedIn**: [linkedin.com/in/elijahbade](https://linkedin.com/in/elijahbade)
 - 🐙 **GitHub**: [github.com/elijahbade](https://github.com/elijahbade)
 - 🏛️ **Hackathon Entry**: OSF × Andela Hackathon 2026 ("Information you can trust")
